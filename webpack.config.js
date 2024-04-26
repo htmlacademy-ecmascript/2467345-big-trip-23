@@ -3,6 +3,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
 
 module.exports = {
+<<<<<<< HEAD
   entry: './src/main.js', // Точка входа
   output: {
     filename: 'bundle.[contenthash].js', // Имя бандла
@@ -11,6 +12,16 @@ module.exports = {
   },
   devtool: 'source-map', // Генерируем карту исходного кода
   plugins: [ // Подключаем плагины
+=======
+  entry: './src/main.js',
+  output: {
+    filename: 'bundle.[contenthash].js',
+    path: path.resolve(__dirname, 'build'),
+    clean: true,
+  },
+  devtool: 'source-map',
+  plugins: [
+>>>>>>> master
     new HtmlPlugin({
       template: 'public/index.html',
     }),
@@ -26,7 +37,11 @@ module.exports = {
     }),
   ],
   module: {
+<<<<<<< HEAD
     rules: [ // Добавляем лоадеры
+=======
+    rules: [
+>>>>>>> master
       {
         test: /\.js$/,
         exclude: /(node_modules)/,
@@ -37,10 +52,15 @@ module.exports = {
           },
         },
       },
+<<<<<<< HEAD
       {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader']
       },
     ],
   },
+=======
+    ]
+  }
+>>>>>>> master
 };
