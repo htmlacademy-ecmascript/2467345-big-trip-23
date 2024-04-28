@@ -289,7 +289,7 @@ main {
   text-transform: uppercase;
   -webkit-user-select: none;
      -moz-user-select: none;
-      -ms-user-select: none;
+      -ms-user-select: none;class="trip-main__trip-controls  trip-controls"
           user-select: none;
   opacity: 0.6;
   cursor: pointer;
