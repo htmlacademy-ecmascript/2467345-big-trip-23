@@ -30,7 +30,7 @@ function createFiltersTemplate(){
         </form>
       </div>
     </div>`
-);
+  );
 }
 
 export default class FiltersView {
