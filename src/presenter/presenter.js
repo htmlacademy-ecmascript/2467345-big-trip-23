@@ -1,4 +1,7 @@
 import FilterFuturePresentPast from '../view/FilterFuturePresentPast.js';
+import TaxiAmsterdam from '../view/TaxiAmsterdam.js';
+import FlightChamonix from '../view/Flihgt-Chamonix.js';
+import TripEvents from '../view/TripEvents.js';
 import {render, RenderPosition} from '../render.js';
 
 export default class Presenter {
@@ -7,11 +10,26 @@ export default class Presenter {
     this.tripEvents = document.querySelector('.trip-events');
   }
 
-  renderTripEvent () {
+  renderFilterFuturePresentPast () {
     render(new FilterFuturePresentPast(), this.tripEvents, RenderPosition.AFTERBEGIN);
   }
 
+  renderTaxiAmsterdam () {
+    render(new TaxiAmsterdam(), this.tripEvents, RenderPosition.AFTERBEGIN);
+  }
+
+  renderFlihgtChamonix () {
+    render(new FlightChamonix(), this.tripEvents, RenderPosition.AFTERBEGIN);
+  }
+
+  renderTripEvents () {
+    render(new TripEvents(), this.tripEvents, RenderPosition.AFTERBEGIN);
+  }
+
   init() {
-    this.renderTripEvent();
+    this.renderFlihgtChamonix();
+    this.renderTaxiAmsterdam();
+    this.renderTripEvents();
+    this.renderFilterFuturePresentPast();
   }
 }
