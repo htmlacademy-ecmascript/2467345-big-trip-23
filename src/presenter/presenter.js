@@ -1,10 +1,17 @@
-import { RenderPosition } from '../render'
+import FilterFuturePresentPast from '../view/FilterFuturePresentPast.js';
+import {render, RenderPosition} from '../render.js';
 
 export default class Presenter {
-constructor() {
-	this.filterFuturePresentPast = document.querySelector('.filterFuturePresentPast'),
-}
-renderFilterFuturePresentPast(){
-render(new FilterFuturePresentPast, this.filterFuturePresentPast, RenderPosition.AFTERBEGIN)
-}
+
+  constructor() {
+    this.tripEvents = document.querySelector('.trip-events');
+  }
+
+  renderTripEvent () {
+    render(new FilterFuturePresentPast(), this.tripEvents, RenderPosition.AFTERBEGIN);
+  }
+
+  init() {
+    this.renderTripEvent();
+  }
 }
