@@ -1,38 +1,13 @@
 // eslint-disable-next-line check-file/filename-naming-convention
 import { createElement } from '../render';
+import offers from './Offers';
+import tripSort from './TripSort';
 
 // eslint-disable-next-line camelcase
 function tripEvents() {
   return `<section class="trip-events">
 	<h2 class="visually-hidden">Trip events</h2>
-
-	<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-		<div class="trip-sort__item  trip-sort__item--day">
-			<input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" checked>
-			<label class="trip-sort__btn" for="sort-day">Day</label>
-		</div>
-
-		<div class="trip-sort__item  trip-sort__item--event">
-			<input id="sort-event" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-event" disabled>
-			<label class="trip-sort__btn" for="sort-event">Event</label>
-		</div>
-
-		<div class="trip-sort__item  trip-sort__item--time">
-			<input id="sort-time" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-time">
-			<label class="trip-sort__btn" for="sort-time">Time</label>
-		</div>
-
-		<div class="trip-sort__item  trip-sort__item--price">
-			<input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price">
-			<label class="trip-sort__btn" for="sort-price">Price</label>
-		</div>
-
-		<div class="trip-sort__item  trip-sort__item--offer">
-			<input id="sort-offer" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-offer" disabled>
-			<label class="trip-sort__btn" for="sort-offer">Offers</label>
-		</div>
-	</form>
-
+	${tripSort()}
 	<ul class="trip-events__list">
 		<li class="trip-events__item">
 			<form class="event event--edit" action="#" method="post">
@@ -127,58 +102,7 @@ function tripEvents() {
 					<button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
 					<button class="event__reset-btn" type="reset">Cancel</button>
 				</header>
-				<section class="event__details">
-					<section class="event__section  event__section--offers">
-						<h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-						<div class="event__available-offers">
-							<div class="event__offer-selector">
-								<input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
-								<label class="event__offer-label" for="event-offer-luggage-1">
-									<span class="event__offer-title">Add luggage</span>
-									&plus;&euro;&nbsp;
-									<span class="event__offer-price">30</span>
-								</label>
-							</div>
-
-							<div class="event__offer-selector">
-								<input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
-								<label class="event__offer-label" for="event-offer-comfort-1">
-									<span class="event__offer-title">Switch to comfort class</span>
-									&plus;&euro;&nbsp;
-									<span class="event__offer-price">100</span>
-								</label>
-							</div>
-
-							<div class="event__offer-selector">
-								<input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-								<label class="event__offer-label" for="event-offer-meal-1">
-									<span class="event__offer-title">Add meal</span>
-									&plus;&euro;&nbsp;
-									<span class="event__offer-price">15</span>
-								</label>
-							</div>
-
-							<div class="event__offer-selector">
-								<input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-								<label class="event__offer-label" for="event-offer-seats-1">
-									<span class="event__offer-title">Choose seats</span>
-									&plus;&euro;&nbsp;
-									<span class="event__offer-price">5</span>
-								</label>
-							</div>
-
-							<div class="event__offer-selector">
-								<input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-								<label class="event__offer-label" for="event-offer-train-1">
-									<span class="event__offer-title">Travel by train</span>
-									&plus;&euro;&nbsp;
-									<span class="event__offer-price">40</span>
-								</label>
-							</div>
-						</div>
-					</section>
-				</section>
+				${offers()}
 			</form>
 		</li>`;
 }
