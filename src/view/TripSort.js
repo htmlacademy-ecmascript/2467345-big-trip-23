@@ -9,7 +9,7 @@ const createTripSort = (props) =>
 const MapCreateTripSort = masTripSort.map((props)=> createTripSort(props)).join('');
 function tripSort() {
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-	${MapCreateTripSort}
+	 ${MapCreateTripSort}
 </form>`;
 }
 export default tripSort;
