@@ -1,6 +1,6 @@
 import FilterFuturePresentPast from '../view/FilterFuturePresentPast.js';
 import TaxiAmsterdam from '../view/TaxiAmsterdam.js';
-import FlightChamonix from '../view/Flihgt-Chamonix.js';
+import FlightChamonix from '../view/FlihgtChamonix.js';
 import TripEvents from '../view/TripEvents.js';
 import {render, RenderPosition} from '../render.js';
 

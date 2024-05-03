@@ -5,7 +5,7 @@ const masEverythingFuturePresentPast = ['Everything', 'Future', 'Present', 'Past
 const createEverythingFuturePresentPast = (props) =>
   `<div class="trip-filters__filter">
   <input id="filter-${props}" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="${props}" checked>
-  <label class="trip-filters__filter-label" for="filter-${props}">${props}</label>
+   <label class="trip-filters__filter-label" for="filter-${props}">${props}</label>
   </div>`;
 const MapCreateEverythingFuturePresentPast = masEverythingFuturePresentPast.map((props)=> createEverythingFuturePresentPast(props)).join('');
 function filterFuturePresentPast() {

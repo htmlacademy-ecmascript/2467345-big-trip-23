@@ -1,71 +1,25 @@
-// eslint-disable-next-line check-file/filename-naming-convention
-// const MasCostOffers = ['30', '100', '15', '5', 40];
-// const CreateCost = (cost) =>
-//   `<span class="event__offer-price">${cost}</span>`;
-// const MapCostOffers = MasCostOffers.map((cost)=> CreateCost(cost)).join('');
+//eslint-disable-next-line check-file/filename-naming-convention
+const MasCostOffers = ['30', '100', '15', '5', 40];
+const MasVariantOffers = ['Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'];
+const MasId = ['luggage', 'comfort', 'meal', 'seats', 'train'];
 
-// const MasVariantOffers = ['Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'];
-
-// const CreateOffers = (props) =>
-//   `<div class="event__available-offers">
-// 	<div class="event__offer-selector">
-// 		<input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
-// 		<label class="event__offer-label" for="event-offer-luggage-1">
-// 			<span class="event__offer-title">${props}</span>
-// 			&plus;&euro;&nbsp;
-// 			${MapCostOffers}
-// 		</label>
-// 	</div>`;
-// const MapOffers = MasVariantOffers.map((props)=> CreateOffers(props)).join('');
+const CreateOffers = (props, cost, masId) =>
+  `<div class="event__available-offers">
+	<div class="event__offer-selector">
+		<input class="event__offer-checkbox  visually-hidden" id="event-offer-${masId}-1" type="checkbox" name="event-offer-${masId}" checked>
+		<label class="event__offer-label" for="event-offer-${masId}-1">
+			<span class="event__offer-title">${props}</span>
+			&plus;&euro;&nbsp;
+			<span class="event__offer-price">${cost}</span>
+		</label>
+	</div>`;
+const MapOffers = MasVariantOffers.map((props, cost, masId)=> CreateOffers(props, MasCostOffers[cost], MasId[masId])).join('');
 // eslint-disable-next-line check-file/filename-naming-convention
 function offers() {
   return `<section class="event__section  event__section--offers">
 						<h3 class="event__section-title  event__section-title--offers">Offers</h3>
 						<div class="event__available-offers">
-							<div class="event__offer-selector">
-								<input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
-								<label class="event__offer-label" for="event-offer-luggage-1">
-									<span class="event__offer-title">Add luggage</span>
-									&plus;&euro;&nbsp;
-									<span class="event__offer-price">30</span>
-								</label>
-							</div>
-
-							<div class="event__offer-selector">
-								<input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
-								<label class="event__offer-label" for="event-offer-comfort-1">
-									<span class="event__offer-title">Switch to comfort class</span>
-									&plus;&euro;&nbsp;
-									<span class="event__offer-price">100</span>
-								</label>
-							</div>
-
-							<div class="event__offer-selector">
-								<input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-								<label class="event__offer-label" for="event-offer-meal-1">
-									<span class="event__offer-title">Add meal</span>
-									&plus;&euro;&nbsp;
-									<span class="event__offer-price">15</span>
-								</label>
-							</div>
-
-							<div class="event__offer-selector">
-								<input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-								<label class="event__offer-label" for="event-offer-seats-1">
-									<span class="event__offer-title">Choose seats</span>
-									&plus;&euro;&nbsp;
-									<span class="event__offer-price">5</span>
-								</label>
-							</div>
-
-							<div class="event__offer-selector">
-								<input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-								<label class="event__offer-label" for="event-offer-train-1">
-									<span class="event__offer-title">Travel by train</span>
-									&plus;&euro;&nbsp;
-									<span class="event__offer-price">40</span>
-								</label>
-							</div>
+						${MapOffers}
 						</div>
 					</section>`;
 }
