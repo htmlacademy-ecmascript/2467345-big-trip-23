@@ -8,9 +8,9 @@ const CreateOffers = (props, cost, masId) =>
 	<div class="event__offer-selector">
 		<input class="event__offer-checkbox  visually-hidden" id="event-offer-${masId}-1" type="checkbox" name="event-offer-${masId}" checked>
 		<label class="event__offer-label" for="event-offer-${masId}-1">
-			<span class="event__offer-title">${props}</span>
-			&plus;&euro;&nbsp;
-			<span class="event__offer-price">${cost}</span>
+		<span class="event__offer-title">${props}</span>
+		&plus;&euro;&nbsp;
+		<span class="event__offer-price">${cost}</span>
 		</label>
 	</div>`;
 const MapOffers = MasVariantOffers.map((props, cost, masId)=> CreateOffers(props, MasCostOffers[cost], MasId[masId])).join('');
