@@ -1,4 +1,5 @@
 
 import Presenter from './presenter/presenter.js';
-const presenter = new Presenter();
+const siteMainElement = document.querySelector('.main');
+const presenter = new Presenter({boardContainer: siteMainElement});
 presenter.init();

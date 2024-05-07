@@ -1,10 +1,9 @@
 
 // eslint-disable-next-line check-file/filename-naming-convention
 import { createElement } from '../render';
-import { Point } from '../../mock/point';
 
-function createTripPointView(i) {
-  const {type, isFavorite} = Point[i];
+function createTripPointView(point) {
+  const {type, isFavorite} = point;
   return `<li class="trip-events__item">
 	<div class="event">
 		<time class="event__date" datetime="2019-03-18">MAR 18</time>
@@ -67,12 +66,12 @@ function createTripPointView(i) {
 }
 
 export default class TripPointView {
-  constructor(index) {
-    this.index = index;
+  constructor(point) {
+    this.point = point;
   }
 
   getTemplate() {
-    return createTripPointView(this.index);
+    return createTripPointView(this.point);
   }
 
   getElement() {

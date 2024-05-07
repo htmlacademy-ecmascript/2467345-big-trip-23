@@ -1,30 +1,37 @@
+import { render, RenderPosition } from '../render.js';
 import FilterFuturePresentPast from '../view/FilterFuturePresentPast.js';
 import TripEvents from '../view/TripEvents.js';
-import {render, RenderPosition} from '../render.js';
 import TripPointView from '../view/TripPointView.js';
+import { points } from '../../mock/Points.js';
+import WayPoint from '../view/waypoint.js';
 
 export default class Presenter {
+  boardComponent = new WayPoint();
+  constructor({boardContainer}) {
+    this.boardContainer = boardContainer;
+  }
 
-  constructor() {
-    this.tripEvents = document.querySelector('.trip-events');
+  renderBoardComponent () {
+    render(this.boardComponent, this.boardContainer);
   }
 
   renderFilterFuturePresentPast () {
-    render(new FilterFuturePresentPast(), this.tripEvents, RenderPosition.AFTERBEGIN);
+    render(new FilterFuturePresentPast(), this.boardContainer, RenderPosition.AFTERBEGIN);
   }
 
-  renderTripPointView (i) {
-    render(new TripPointView(i), this.tripEvents, RenderPosition.AFTERBEGIN);
+  renderTripPointView (point) {
+    render(new TripPointView(point), this.boardContainer, RenderPosition.AFTERBEGIN);
   }
 
   renderTripEvents () {
-    render(new TripEvents(), this.tripEvents, RenderPosition.AFTERBEGIN);
+    render(new TripEvents(), this.boardContainer, RenderPosition.AFTERBEGIN);
   }
 
   init() {
-    for(let i = 0; i < 3; i++) {
-      this.renderTripPointView(i);
-    }
+    this.renderBoardComponent();
+    points.forEach((point) => {
+      this.renderTripPointView(point);
+    });
     this.renderTripEvents();
     this.renderFilterFuturePresentPast();
   }
