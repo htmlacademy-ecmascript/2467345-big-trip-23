@@ -5,8 +5,6 @@ const DATE_FORMAT = 'D MMMM';
 const TIME_FORMAT = 'HH:mm';
 const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
 
-
-
 function humanizeTaskDueDate(dueDate) {
   return dueDate ? dayjs(dueDate).format(DATE_FORMAT) : '';
 }
