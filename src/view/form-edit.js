@@ -1,8 +1,9 @@
-import {createElement} from '../render.js';
-import {getDateTime} from '../utils.js';
+import { getDateTime } from '../utils/point.js';
 import { mockDestinations } from '../mock/points.js';
 import { mockOffers } from '../mock/points.js';
-import { getOffersTypeLength } from '../utils';
+import { getOffersTypeLength } from '../utils/point.js';
+
+import AbstractVeiw from '../framework/view/abstract-view.js';
 
 const BLANK_POINT = {
   id: 0,
@@ -175,24 +176,34 @@ function createFormEditTemplate(point){
   );
 }
 
-export default class FormEditView {
-  constructor({point = BLANK_POINT}){
-    this.point = point;
+export default class FormEditView extends AbstractVeiw{
+  #point = null;
+  #handleFormSubmit = null;
+  #handleFormClick = null;
+
+  constructor({point = BLANK_POINT, onFormSubmit, onFormClick}){
+    super();
+    this.#point = point;
+    this.#handleFormSubmit = onFormSubmit;
+    this.#handleFormClick = onFormClick;
+
+    this.element.querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#formClickHandler);
   }
 
-  getTemplate(){
-    return createFormEditTemplate(this.point);
-  }
+  #formClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormClick();
+  };
 
-  getElement(){
-    if(!this.element){
-      this.element = createElement(this.getTemplate());
-    }
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
 
-    return this.element;
-  }
-
-  removeElement(){
-    this.element = null;
+  get template(){
+    return createFormEditTemplate(this.#point);
   }
 }

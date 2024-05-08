@@ -1,17 +1,11 @@
 import dayjs from 'dayjs';
-import { mockOffers } from './mock/points';
+import { mockOffers } from '../mock/points';
 
 const DATE_FORMAT = 'D MMMM';
 const TIME_FORMAT = 'HH:mm';
 const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
 
-function getRandomArrayElement(items){
-  return items[Math.floor(Math.random() * items.length)];
-}
 
-function getRandomInt(maxInt){
-  return Math.floor(Math.random() * maxInt);
-}
 
 function humanizeTaskDueDate(dueDate) {
   return dueDate ? dayjs(dueDate).format(DATE_FORMAT) : '';
@@ -51,4 +45,4 @@ function getOffersTypeLength(type){
   return mockOffers.find((offer) => offer.type === type).offers.length;
 }
 
-export {getRandomArrayElement,getRandomInt,humanizeTaskDueDate,getTimeFromDate,dateDiff,isFavoriteStyle,getDateTime,getOffersTypeLength};
+export {humanizeTaskDueDate,getTimeFromDate,dateDiff,isFavoriteStyle,getDateTime,getOffersTypeLength};

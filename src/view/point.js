@@ -1,6 +1,8 @@
-import {createElement} from '../render.js';
-import {humanizeTaskDueDate,getTimeFromDate,dateDiff,isFavoriteStyle} from '../utils.js';
+
+import {humanizeTaskDueDate,getTimeFromDate,dateDiff,isFavoriteStyle} from '../utils/point.js';
 import { mockDestinations, mockOffers } from '../mock/points.js';
+
+import AbstractVeiw from '../framework/view/abstract-view.js';
 
 function createPointTemplate(point){
 
@@ -67,24 +69,25 @@ function createPointTemplate(point){
   );
 }
 
-export default class PointView {
-  constructor({point}){
-    this.point = point;
+export default class PointView extends AbstractVeiw{
+  #point = null;
+  #handleEditClick = null;
+
+  constructor({point, onEditClick}){
+    super();
+    this.#point = point;
+    this.#handleEditClick = onEditClick;
+
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#editClickHandler);
   }
 
-  getTemplate(){
-    return createPointTemplate(this.point);
-  }
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditClick();
+  };
 
-  getElement(){
-    if(!this.element){
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement(){
-    this.element = null;
+  get template(){
+    return createPointTemplate(this.#point);
   }
 }
