@@ -1,4 +1,4 @@
-import { points } from '../../mock/Points.js';
+
 import { render, RenderPosition } from '../render.js';
 import FilterFuturePresentPast from '../view/FilterFuturePresentPast.js';
 import TripEvents from '../view/TripEvents.js';
@@ -9,9 +9,10 @@ import TaskListView from '../view/SortView.js';
 export default class Presenter {
   boardComponent = new WayPoint();
   TaskListView = new TaskListView();
-  constructor({boardContainer, PointModel}) {
+  constructor({boardContainer, pointModel}) {
     this.boardContainer = boardContainer;
-    this.PointModel = PointModel;
+    this.pointModel = pointModel;
+    // this.destination = destination;
   }
 
   renderBoardComponent () {
@@ -22,8 +23,8 @@ export default class Presenter {
     render(new FilterFuturePresentPast(), this.boardContainer, RenderPosition.AFTERBEGIN);
   }
 
-  renderTripPointView (PointsModels, destination) {
-    render(new TripPointView(PointsModels, destination), this.TaskListView, RenderPosition.AFTERBEGIN);
+  renderTripPointView (pointModel, destination) {
+    render(new TripPointView(pointModel, destination), this.TaskListView, RenderPosition.AFTERBEGIN);
   }
 
   renderTripEvents () {
@@ -33,11 +34,11 @@ export default class Presenter {
 
   init() {
     // eslint-disable-next-line no-unused-vars
-    points = this.PointModel.getPoints();
-    destination = this.PointModel.getDestination();
+    const points = this.pointModel.getPoints();
+    // const destination = this.destination.getDestination();
     this.renderBoardComponent();
-    points.forEach((pointsMod, destination) => {
-      this.renderTripPointView(pointsMod, destination);
+    points.forEach((pointModel, destination) => {
+      this.renderTripPointView(pointModel, destination);
     });
     this.renderTripEvents();
     this.renderFilterFuturePresentPast();

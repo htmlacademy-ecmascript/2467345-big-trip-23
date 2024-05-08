@@ -2,7 +2,7 @@
 import { points } from '../mock/Points';
 import { destination } from '../mock/destination';
 
-export default class PointModel {
+export default class pointModel {
   constructor() {
     this.points = [];
     this.destination = [];
