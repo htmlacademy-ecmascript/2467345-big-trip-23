@@ -1,16 +1,16 @@
 // eslint-disable-next-line check-file/filename-naming-convention
 import { points } from '../mock/Points';
-import { destination } from '../mock/destination';
+import { destinations } from '../mock/destination';
 
 export default class pointModel {
   constructor() {
     this.points = [];
-    this.destination = [];
+    this.destinations = [];
   }
 
   init() {
     this.points = points;
-    this.destination = destination;
+    this.destinations = destinations;
   }
 
   getPoints() {
@@ -18,7 +18,7 @@ export default class pointModel {
   }
 
   getDestination() {
-    return this.destination;
+    return this.destinations;
   }
 }
 

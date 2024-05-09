@@ -3,7 +3,6 @@
 import { createElement } from '../render';
 
 function createTripPointView(point, destination) {
-	console.log(destination)
   const {type, isFavorite} = point;
   const currntDestination = destination.find((destination) => destination.id === point.destination);
   return `<li class="trip-events__item">
