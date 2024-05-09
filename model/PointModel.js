@@ -10,7 +10,7 @@ export default class pointModel {
 
   init() {
     this.points = points;
-    this.points = destination;
+    this.destination = destination;
   }
 
   getPoints() {

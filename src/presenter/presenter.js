@@ -23,10 +23,6 @@ export default class Presenter {
     render(new FilterFuturePresentPast(), this.boardContainer, RenderPosition.AFTERBEGIN);
   }
 
-  renderTripPointView (pointModel, destination) {
-    render(new TripPointView(pointModel, destination), this.TaskListView, RenderPosition.AFTERBEGIN);
-  }
-
   renderTripEvents () {
     render(new TripEvents(), this.boardContainer, RenderPosition.AFTERBEGIN);
   }
@@ -35,10 +31,10 @@ export default class Presenter {
   init() {
     // eslint-disable-next-line no-unused-vars
     const points = this.pointModel.getPoints();
-    // const destination = this.destination.getDestination();
+    const destination = this.pointModel.getDestination();
     this.renderBoardComponent();
-    points.forEach((pointModel, destination) => {
-      this.renderTripPointView(pointModel, destination);
+    points.forEach((point) => {
+      render(new TripPointView(point, destination), this.boardContainer);
     });
     this.renderTripEvents();
     this.renderFilterFuturePresentPast();
