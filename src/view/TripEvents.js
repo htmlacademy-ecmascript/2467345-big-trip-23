@@ -13,6 +13,7 @@ const CreateEventTypeList = (props) =>
 const MapEventTypeList = MasEventTypeList.map((props)=> CreateEventTypeList(props)).join('');
 // eslint-disable-next-line camelcase
 function tripEvents(destinations, point) {
+  // eslint-disable-next-line no-shadow
   const currntDestinations = destinations.find((destinations) => destinations.id === point.destination);
   return `<section class="trip-events">
 	<h2 class="visually-hidden">Trip events</h2>

@@ -4,6 +4,7 @@ import { createElement } from '../render';
 
 function createTripPointView(point, destination) {
   const {type, isFavorite} = point;
+  // eslint-disable-next-line no-shadow
   const currntDestination = destination.find((destination) => destination.id === point.destination);
   return `<li class="trip-events__item">
 	<div class="event">
