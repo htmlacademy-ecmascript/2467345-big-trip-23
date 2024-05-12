@@ -27,13 +27,13 @@ export default class Presenter {
   init() {
     // eslint-disable-next-line no-unused-vars
     const points = this.pointModel.getPoints();
-    const destinations = this.pointModel.getDestination();
+    const distinations = this.pointModel.getDestination();
     this.renderBoardComponent();
     points.forEach((point) => {
-      render(new TripPointView(point, destinations), this.boardContainer);
+      render(new TripPointView(point, distinations), this.boardContainer);
     });
     points.forEach((point) => {
-      render(new TripEvents(point, destinations), this.boardContainer, RenderPosition.AFTERBEGIN);
+      render(new TripEvents(point, distinations), this.boardContainer, RenderPosition.AFTERBEGIN);
     });
     this.renderFilterFuturePresentPast();
   }

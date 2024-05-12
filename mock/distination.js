@@ -1,4 +1,4 @@
-export const destinations = [
+export const distinations = [
   {
     id: 'bfa5cb75-a1fe-4b77-a83c-0e528e910e04',
     description: 'Chamonix, is a beautiful city, a true asian pearl, with crowded streets.',

@@ -9,12 +9,11 @@ const CreateEventTypeList = (props) =>
 <input id="event-type-${props}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${props}">
 <label class="event__type-label  event__type-label--${props}" for="event-type-${props}-1">${props}</label>
 </div>`;
-
 const MapEventTypeList = MasEventTypeList.map((props)=> CreateEventTypeList(props)).join('');
 // eslint-disable-next-line camelcase
-function tripEvents(destinations, point) {
+function tripEvents(distinations, point) {
   // eslint-disable-next-line no-shadow
-  const currntDestinations = destinations.find((destinations) => destinations.id === point.destination);
+  const currntDestinations = distinations.find((distination) => distination.id === point.destination);
   return `<section class="trip-events">
 	<h2 class="visually-hidden">Trip events</h2>
 	${tripSort()}
@@ -75,13 +74,13 @@ function tripEvents(destinations, point) {
 
 // eslint-disable-next-line camelcase
 export default class TripEvents {
-  constructor(destinations, point) {
-    this.destinations = destinations;
+  constructor(distinations, point) {
+    this.distinations = distinations;
     this.point = point;
   }
 
   getTemplate() {
-    return tripEvents(this.destinations, this.point);
+    return tripEvents(this.distinations, this.point);
   }
 
   getElement() {

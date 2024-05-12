@@ -2,10 +2,10 @@
 // eslint-disable-next-line check-file/filename-naming-convention
 import { createElement } from '../render';
 
-function createTripPointView(point, destination) {
+function createTripPointView(point, distinations) {
   const {type, isFavorite} = point;
   // eslint-disable-next-line no-shadow
-  const currntDestination = destination.find((destination) => destination.id === point.destination);
+  const currntDistination = distinations.find((distination) => distination.id === point.destination);
   return `<li class="trip-events__item">
 	<div class="event">
 		<time class="event__date" datetime="2019-03-18">MAR 18</time>
@@ -18,7 +18,7 @@ function createTripPointView(point, destination) {
 				alt="Event type icon"
 			/>
 		</div>
-		<h3 class="event__title">${type} ${currntDestination.name}</h3>
+		<h3 class="event__title">${type} ${currntDistination.name}</h3>
 		<div class="event__schedule">
 			<p class="event__time">
 				<time class="event__start-time" datetime="2019-03-18T12:25"
@@ -68,9 +68,9 @@ function createTripPointView(point, destination) {
 }
 
 export default class TripPointView {
-  constructor(point, destination) {
+  constructor(point, distination) {
     this.point = point;
-    this.destination = destination;
+    this.destination = distination;
   }
 
   getTemplate() {
