@@ -3,14 +3,14 @@ const MasCostOffers = ['30', '100', '15', '5', 40];
 const MasVariantOffers = ['Add luggage', 'Switch to comfort class', 'Add meal', 'Choose seats', 'Travel by train'];
 const MasId = ['luggage', 'comfort', 'meal', 'seats', 'train'];
 
-const CreateOffers = (props, cost, masid) =>
+const CreateOffers = (props, cost, masId) =>
   `<div class="event__available-offers">
 	<div class="event__offer-selector">
-		<input class="event__offer-checkbox  visually-hidden" id="event-offer-${masid}-1" type="checkbox" name="event-offer-${masid}" checked>
-		<label class="event__offer-label" for="event-offer-${masid}-1">
-		 <span class="event__offer-title">${props}</span>
-		 &plus;&euro;&nbsp;
-		 <span class="event__offer-price">${cost}</span>
+		<input class="event__offer-checkbox  visually-hidden" id="event-offer-${masId}-1" type="checkbox" name="event-offer-${masId}" checked>
+		<label class="event__offer-label" for="event-offer-${masId}-1">
+		<span class="event__offer-title">${props}</span>
+		&plus;&euro;&nbsp;
+		<span class="event__offer-price">${cost}</span>
 		</label>
 	</div>`;
 const MapOffers = MasVariantOffers.map((props, cost, masid)=> CreateOffers(props, MasCostOffers[cost], MasId[masid])).join('');
