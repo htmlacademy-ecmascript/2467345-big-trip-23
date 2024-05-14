@@ -1,21 +1,21 @@
-import {createElement} from '../render.js';
-import {humanizeTaskDueDate,getTimeFromDate,dateDiff,isFavoriteStyle} from '../utils.js';
-import { mockDestinations, mockOffers } from '../mock/points.js';
 
-function createPointTemplate(point){
+import {humanizeTaskDueDate,getTimeFromDate,dateDiff,isFavoriteStyle} from '../utils/point.js';
+import AbstractVeiw from '../framework/view/abstract-view.js';
+
+function createPointTemplate(point, destinationsData, offersData){
 
   const {type,destination,basePrice,offers,isFavorite,dateFrom,dateTo} = point;
 
   const dateFromHumanize = humanizeTaskDueDate(dateFrom);
   const timeFrom = getTimeFromDate(dateFrom);
   const timeTo = getTimeFromDate(dateTo);
-  const objDestination = mockDestinations.find((dest) => dest.id === destination);
+  const objDestination = destinationsData.find((dest) => dest.id === destination);
   const duration = dateDiff(dateFrom,dateTo);
 
   function viewOffers(){
     let result = '<ul class="event__selected-offers">';
     for(let i = 0; i < offers.length; i++){
-      const {title, price} = mockOffers.find((offer) => offer.type === type).offers[i];
+      const {title, price} = offersData.find((offer) => offer.type === type).offers[i];
       result = `${result}
       <li class="event__offer">
         <span class="event__offer-title">${title}</span>
@@ -67,24 +67,33 @@ function createPointTemplate(point){
   );
 }
 
-export default class PointView {
-  constructor({point}){
-    this.point = point;
+export default class PointView extends AbstractVeiw{
+  #point = null;
+  #handleEditClick = null;
+  #destinationsData = null;
+  #offersData = null;
+
+  constructor({point, onEditClick, destinationsData, offersData}){
+    super();
+    this.#point = point;
+    this.#handleEditClick = onEditClick;
+    this.#destinationsData = destinationsData;
+    this.#offersData = offersData;
+
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#editClickHandler);
   }
 
-  getTemplate(){
-    return createPointTemplate(this.point);
-  }
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditClick();
+  };
 
-  getElement(){
-    if(!this.element){
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement(){
-    this.element = null;
+  get template(){
+    return createPointTemplate(
+      this.#point,
+      this.#destinationsData,
+      this.#offersData
+    );
   }
 }

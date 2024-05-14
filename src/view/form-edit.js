@@ -1,8 +1,6 @@
-import {createElement} from '../render.js';
-import {getDateTime} from '../utils.js';
-import { mockDestinations } from '../mock/points.js';
-import { mockOffers } from '../mock/points.js';
-import { getOffersTypeLength } from '../utils';
+import { getDateTime } from '../utils/point.js';
+import { getOffersTypeLength } from '../utils/point.js';
+import AbstractVeiw from '../framework/view/abstract-view.js';
 
 const BLANK_POINT = {
   id: 0,
@@ -16,13 +14,13 @@ const BLANK_POINT = {
 };
 
 
-function createFormEditTemplate(point){
+function createFormEditTemplate(point, destinationsData, offersData){
 
   const {type,destination,basePrice,offers,dateFrom,dateTo} = point;
 
   const dateTimeFrom = getDateTime(dateFrom);
   const dateTimeTo = getDateTime(dateTo);
-  const objDestination = mockDestinations.find((dest) => dest.id === destination);
+  const objDestination = destinationsData.find((dest) => dest.id === destination);
 
   function viewPictures(){
     let result = '<div class="event__photos-tape">';
@@ -40,7 +38,7 @@ function createFormEditTemplate(point){
       if (offers[i]){
         checked = 'checked';
       }
-      const {title, price} = mockOffers.find((offer) => offer.type === type).offers[i];
+      const {title, price} = offersData.find((offer) => offer.type === type).offers[i];
 
       result = `${result}
       <div class="event__offer-selector">
@@ -175,24 +173,42 @@ function createFormEditTemplate(point){
   );
 }
 
-export default class FormEditView {
-  constructor({point = BLANK_POINT}){
-    this.point = point;
+export default class FormEditView extends AbstractVeiw{
+  #point = null;
+  #handleFormSubmit = null;
+  #handleFormClick = null;
+  #destinationsData = null;
+  #offersData = null;
+
+  constructor({point = BLANK_POINT, onFormSubmit, onFormClick, destinationsData, offersData }){
+    super();
+    this.#point = point;
+    this.#handleFormSubmit = onFormSubmit;
+    this.#handleFormClick = onFormClick;
+    this.#destinationsData = destinationsData;
+    this.#offersData = offersData;
+
+    this.element.querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#formClickHandler);
   }
 
-  getTemplate(){
-    return createFormEditTemplate(this.point);
-  }
+  #formClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormClick();
+  };
 
-  getElement(){
-    if(!this.element){
-      this.element = createElement(this.getTemplate());
-    }
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
 
-    return this.element;
-  }
-
-  removeElement(){
-    this.element = null;
+  get template(){
+    return createFormEditTemplate(
+      this.#point,
+      this.#destinationsData,
+      this.#offersData
+    );
   }
 }
