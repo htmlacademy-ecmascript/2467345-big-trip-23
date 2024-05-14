@@ -12,6 +12,8 @@ export default class ListPresenter {
   #tripEventList = new TripEventsListView();
 
   #points = [];
+  #destinations = [];
+  #offers = [];
 
   constructor({container, pointsModel}){
     this.#container = container;
@@ -20,7 +22,8 @@ export default class ListPresenter {
 
   init(){
     this.#points = [...this.#pointsModel.points];
-
+    this.#destinations = [...this.#pointsModel.destinations];
+    this.#offers = [...this.#pointsModel.offers];
     this.#renderList();
   }
 
@@ -34,9 +37,8 @@ export default class ListPresenter {
       return;
     }
 
-
     for(let i = 0; i < this.#points.length; i++){
-      this.#renderPoint(this.#points[i]);
+      this.#renderPoint(this.#points[i], this.#pointsModel);
     }
   }
 
@@ -53,7 +55,9 @@ export default class ListPresenter {
       onEditClick: () => {
         replaceCardToForm();
         document.addEventListener('keydown', escKeyDownHandler);
-      }
+      },
+      destinationsData: this.#destinations,
+      offersData: this.#offers,
     });
     const pointEditComponent = new FormEditView({
       point,
@@ -64,7 +68,9 @@ export default class ListPresenter {
       onFormClick: () => {
         replaceFormToCard();
         document.removeEventListener('keydown', escKeyDownHandler);
-      }
+      },
+      destinationsData: this.#destinations,
+      offersData: this.#offers,
     });
 
     function replaceCardToForm() {
