@@ -43,4 +43,35 @@ function getOffersTypeLength(type){
   return mockOffers.find((offer) => offer.type === type).offers.length;
 }
 
-export {humanizeTaskDueDate,getTimeFromDate,dateDiff,isFavoriteStyle,getDateTime,getOffersTypeLength};
+function isFuture(point){
+  if (dayjs(point.dateTo) < dayjs()){
+    return true;
+  } else{
+    return false;
+  }
+}
+function isPresent(point){
+  if (dayjs(point.dateFrom) < dayjs() && dayjs(point.dateTo) > dayjs()){
+    return true;
+  } else{
+    return false;
+  }
+}
+function isPast(point){
+  if (dayjs(point.dateFrom) > dayjs()){
+    return true;
+  } else{
+    return false;
+  }
+}
+export {
+  humanizeTaskDueDate,
+  getTimeFromDate,
+  dateDiff,
+  isFavoriteStyle,
+  getDateTime,
+  getOffersTypeLength,
+  isPast,
+  isPresent,
+  isFuture
+};
