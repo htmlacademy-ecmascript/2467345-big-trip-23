@@ -1,4 +1,4 @@
-import {render, replace} from '../framework/render.js';
+import {render} from '../framework/render.js';
 import SortView from '../view/sort';
 import PointListView from '../view/point-list.js';
 import NoPointView from '../view/no-point.js';
