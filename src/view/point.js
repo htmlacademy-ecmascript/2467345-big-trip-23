@@ -70,23 +70,32 @@ function createPointTemplate(point, destinationsData, offersData){
 export default class PointView extends AbstractVeiw{
   #point = null;
   #handleEditClick = null;
+  #handleFavoriteClick = null;
   #destinationsData = null;
   #offersData = null;
 
-  constructor({point, onEditClick, destinationsData, offersData}){
+  constructor({point, onEditClick, onFavoriteClick, destinationsData, offersData}){
     super();
     this.#point = point;
     this.#handleEditClick = onEditClick;
+    this.#handleFavoriteClick = onFavoriteClick;
     this.#destinationsData = destinationsData;
     this.#offersData = offersData;
 
     this.element.querySelector('.event__rollup-btn')
       .addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('.event__favorite-btn')
+      .addEventListener('click', this.#favoriteClickHandler);
   }
 
   #editClickHandler = (evt) => {
     evt.preventDefault();
     this.#handleEditClick();
+  };
+
+  #favoriteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFavoriteClick();
   };
 
   get template(){
