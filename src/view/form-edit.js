@@ -201,7 +201,7 @@ export default class FormEditView extends AbstractVeiw{
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormSubmit();
+    this.#handleFormSubmit(this.#point);
   };
 
   get template(){

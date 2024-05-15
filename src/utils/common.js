@@ -5,4 +5,8 @@ function getRandomArrayElement(items){
 function getRandomInt(maxInt){
   return Math.floor(Math.random() * maxInt);
 }
-export {getRandomArrayElement, getRandomInt};
+
+function updateItem(items, update){
+  return items.map((item) => item.id === update.id ? update : item);
+}
+export {getRandomArrayElement, getRandomInt, updateItem};
