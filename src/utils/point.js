@@ -64,6 +64,45 @@ function isPast(point){
     return false;
   }
 }
+
+function getWeightForNull(varA, varB) {
+  if (varA === null && varB === null) {
+    return 0;
+  }
+
+  if (varA === null) {
+    return 1;
+  }
+
+  if (varB === null) {
+    return -1;
+  }
+
+  return null;
+}
+
+function sortPointDay(pointA, pointB) {
+  const weight = getWeightForNull(pointA.dateFrom, pointB.dateFrom);
+
+  return weight ?? dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom));
+}
+
+function sortPointTime(pointA, pointB) {
+  const timeA = dayjs(pointA.dateTo).diff(dayjs(pointA.dateFrom));
+  const timeB = dayjs(pointB.dateTo).diff(dayjs(pointB.dateFrom));
+
+  const weight = getWeightForNull(timeA, timeB);
+
+  return weight ?? timeB - timeA;
+}
+
+function sortPointPrice(pointA, pointB) {
+  const weight = getWeightForNull(pointA.basePrice, pointB.basePrice);
+
+  return weight ?? pointB.basePrice - pointA.basePrice;
+}
+
+
 export {
   humanizeTaskDueDate,
   getTimeFromDate,
@@ -73,5 +112,8 @@ export {
   getOffersTypeLength,
   isPast,
   isPresent,
-  isFuture
+  isFuture,
+  sortPointDay,
+  sortPointTime,
+  sortPointPrice
 };
