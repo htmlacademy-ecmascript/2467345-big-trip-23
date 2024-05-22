@@ -1,8 +1,9 @@
 import { getDateTime } from '../utils/point.js';
 import { getOffersTypeLength } from '../utils/point.js';
-
+import flatpickr from 'flatpickr';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
+import 'flatpickr/dist/flatpickr.min.css';
 const BLANK_POINT = {
   id: 0,
   type: 'taxi',
@@ -162,6 +163,7 @@ export default class FormEditView extends AbstractStatefulView{
   #handleFormClick = null;
   #destinationsData = null;
   #offersData = null;
+  #datepicker = null;
 
   constructor({point = BLANK_POINT, onFormSubmit, onFormClick, destinationsData, offersData }){
     super();
@@ -192,6 +194,8 @@ export default class FormEditView extends AbstractStatefulView{
     }
     this.element.querySelector('.event__input--destination')
       .addEventListener('input', this.#destinationInputHandler);
+
+    this.#setDatepicker();
   }
 
   #offerInputHandler = (evt) => {
@@ -220,6 +224,45 @@ export default class FormEditView extends AbstractStatefulView{
   reset(point){
     this.updateElement(
       FormEditView.parsePointToState(point),
+    );
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepicker) {
+      this.#datepicker.destroy();
+      this.#datepicker = null;
+    }
+  }
+
+  #dateFromChangeHandler = ([userDate]) => {
+    this.updateElement({
+      dateFrom: userDate,
+    });
+  };
+
+  #dateToChangeHandler = ([userDate]) => {
+    this.updateElement({
+      dateTo: userDate,
+    });
+  };
+
+  #setDatepicker(){
+    const dateInputs = this.element.querySelectorAll('.event__input--time');
+    this.#createDatepicker(dateInputs[0], this.#dateFromChangeHandler, 'From');
+    this.#createDatepicker(dateInputs[1], this.#dateToChangeHandler, 'To');
+
+  }
+
+  #createDatepicker(element, dateChangeHandler, dateName) {
+    this.#datepicker = flatpickr(
+      element,
+      {
+        dateFormat: 'd/m/Y H:i',
+        defaultDate: this._state[`date${ dateName}`],
+        onChange: dateChangeHandler,
+      },
     );
   }
 
