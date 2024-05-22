@@ -51,7 +51,7 @@ const mockDestinations = [
   },
   {
     id:2,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.',
+    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
     name: 'Tokio',
     pictures: [
       {
@@ -66,7 +66,7 @@ const mockDestinations = [
   },
   {
     id:3,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget.',
+    description: ' Cras aliquet varius magna, non porta ligula feugiat eget.',
     name: 'Bangkok',
     pictures: [
       {
