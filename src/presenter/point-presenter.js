@@ -52,7 +52,6 @@ export default class PointPresenter{
 
     if (prevPointComponent === null || prevFormEditComponent === null) {
       render(this.#pointComponent, this.#pointListContainer);
-      // console.log(this.#pointComponent);
       return;
     }
 
@@ -70,6 +69,7 @@ export default class PointPresenter{
 
   resetView() {
     if (this.#mode !== Mode.DEFAULT) {
+      this.#formEditComponent.reset(this.#point);
       this.#replaceFormToCard();
     }
   }
@@ -95,6 +95,7 @@ export default class PointPresenter{
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
+      this.#formEditComponent.reset(this.#point);
       this.#replaceFormToCard();
     }
   };
