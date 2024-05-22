@@ -240,7 +240,6 @@ export default class FormEditView extends AbstractStatefulView{
     this.updateElement({
       dateFrom: userDate,
     });
-    console.log(this._state);
   };
 
   #dateToChangeHandler = ([userDate]) => {
