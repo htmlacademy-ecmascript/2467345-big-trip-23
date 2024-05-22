@@ -55,6 +55,16 @@ function createFormEditTemplate(point, destinationsData, offersData){
     result = `${result}</div>`;
     return (result);
   }
+  function viewDestinations(){
+    let result = '<datalist id="destination-list-1">';
+    for(let i = 0; i < destinationsData.length; i++){
+      result = `${result}
+          <option value="${destinationsData[i].name}"></option>
+        `;
+    }
+    result = `${result}</datalist>`;
+    return result;
+  }
 
   return (
     `<li class="trip-events__item">
@@ -124,11 +134,8 @@ function createFormEditTemplate(point, destinationsData, offersData){
             ${type}
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${objDestination.name}" list="destination-list-1">
-          <datalist id="destination-list-1">
-            <option value="Amsterdam"></option>
-            <option value="Geneva"></option>
-            <option value="Chamonix"></option>
-          </datalist>
+          ${viewDestinations()}
+
         </div>
 
         <div class="event__field-group  event__field-group--time">
