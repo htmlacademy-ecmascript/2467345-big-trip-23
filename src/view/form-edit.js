@@ -1,6 +1,7 @@
 import { getDateTime } from '../utils/point.js';
 import { getOffersTypeLength } from '../utils/point.js';
 import AbstractVeiw from '../framework/view/abstract-view.js';
+// import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
 const BLANK_POINT = {
   id: 0,
@@ -42,9 +43,9 @@ function createFormEditTemplate(point, destinationsData, offersData){
 
       result = `${result}
       <div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" ${checked}>
-        <label class="event__offer-label" for="event-offer-comfort-1">
-          <span class="event__offer-title">${title}</span>
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${title}-${i + 1}" type="checkbox" name="event-offer-${title}" ${checked}>
+        <label class="event__offer-label" for="event-offer-${title}-${i + 1}">
+          <span class="event__offer-title">Add ${title}</span>
           &plus;&euro;&nbsp;
           <span class="event__offer-price">${price}</span>
         </label>

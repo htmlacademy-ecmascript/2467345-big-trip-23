@@ -65,6 +65,11 @@ function isPast(point){
   }
 }
 
+/**
+ * for sort functions.
+ * @param varA - first object to compare.
+ * @param varB - second object to compare.
+ */
 function getWeightForNull(varA, varB) {
   if (varA === null && varB === null) {
     return 0;

@@ -98,12 +98,12 @@ const mockOffers = [
     offers:[
       {
         id: 1,
-        title: 'Add luggage',
+        title: 'luggage',
         price: 50
       },
       {
         id: 2,
-        title: 'Add meal',
+        title: 'meal',
         price: 120
       },
     ]
@@ -113,12 +113,12 @@ const mockOffers = [
     offers:[
       {
         id: 1,
-        title: 'Add luggage',
+        title: 'luggage',
         price: 50
       },
       {
         id: 2,
-        title: 'Add meal',
+        title: 'meal',
         price: 120
       },
     ]
