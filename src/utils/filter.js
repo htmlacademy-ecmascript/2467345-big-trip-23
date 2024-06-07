@@ -1,5 +1,5 @@
-import { FilterType } from '../const';
-import { isPast, isPresent, isFuture } from './point';
+import { FilterType } from "../const";
+import { isPast, isPresent, isFuture } from "./point";
 const filter = {
   [FilterType.EVERYTHING]: (points) => points,
   [FilterType.FUTURE]: (points) => points.filter((point) => isPast(point)),
@@ -7,4 +7,4 @@ const filter = {
   [FilterType.PAST]: (points) => points.filter((point) => isFuture(point)),
 };
 
-export {filter};
+export { filter };
