@@ -1,66 +1,64 @@
-import dayjs from 'dayjs';
-import { mockOffers } from '../mock/points';
+import dayjs from "dayjs";
+import { mockOffers } from "../mock/points";
 
-const DATE_FORMAT = 'D MMMM';
-const TIME_FORMAT = 'HH:mm';
-const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
+const DATE_FORMAT = "D MMMM";
+const TIME_FORMAT = "HH:mm";
+const DATE_TIME_FORMAT = "DD/MM/YY HH:mm";
 
 function humanizeTaskDueDate(dueDate) {
-  return dueDate ? dayjs(dueDate).format(DATE_FORMAT) : '';
+  return dueDate ? dayjs(dueDate).format(DATE_FORMAT) : "";
 }
 
-
-function getTimeFromDate(date){
-  return date ? dayjs(date).format(TIME_FORMAT) : '';
+function getTimeFromDate(date) {
+  return date ? dayjs(date).format(TIME_FORMAT) : "";
 }
 
-function getDateTime(date){
-  return date ? dayjs(date).format(DATE_TIME_FORMAT) : '';
+function getDateTime(date) {
+  return date ? dayjs(date).format(DATE_TIME_FORMAT) : "";
 }
 
-function dateDiff(dateFrom,dateTo){
-
+function dateDiff(dateFrom, dateTo) {
   const date1 = dayjs(dateFrom);
   const date2 = dayjs(dateTo);
 
-  let minutes = date2.diff(date1, 'minute');
+  let minutes = date2.diff(date1, "minute");
   let hours = Math.floor(minutes / 60);
   const days = Math.floor(minutes / (24 * 60));
-  hours = hours - (days * 24);
-  minutes = minutes - (hours * 60);
+  hours = hours - days * 24;
+  minutes = minutes - hours * 60;
 
-  const daysStr = days !== 0 ? `${days}D` : '';
-  const hoursStr = hours !== 0 ? `${hours}H` : '';
+  const daysStr = days !== 0 ? `${days}D` : "";
+  const hoursStr = hours !== 0 ? `${hours}H` : "";
 
-  return `${daysStr + hoursStr + minutes }M`;
+  return `${daysStr + hoursStr + minutes}M`;
 }
 
-function isFavoriteStyle(isFavorite){
-  return isFavorite === true ? '--active' : '';
+function isFavoriteStyle(isFavorite) {
+  return isFavorite === true ? "--active" : "";
 }
 
-function getOffersTypeLength(type){
+function getOffersTypeLength(type) {
   return mockOffers.find((offer) => offer.type === type).offers.length;
 }
 
-function isFuture(point){
-  if (dayjs(point.dateTo) < dayjs()){
+function isFuture(point) {
+  if (dayjs(point.dateTo) < dayjs()) {
     return true;
-  } else{
+  } else {
     return false;
   }
 }
-function isPresent(point){
-  if (dayjs(point.dateFrom) < dayjs() && dayjs(point.dateTo) > dayjs()){
+function isPresent(point) {
+  if (dayjs(point.dateFrom) < dayjs() && dayjs(point.dateTo) > dayjs()) {
     return true;
-  } else{
+  } else {
     return false;
   }
 }
-function isPast(point){
-  if (dayjs(point.dateFrom) > dayjs()){
+function isPast(point) {
+  if (dayjs(point.dateFrom) > dayjs()) {
     return true;
-  } else{
+  } else {
     return false;
   }
 }
@@ -107,7 +105,9 @@ function sortPointPrice(pointA, pointB) {
   return weight ?? pointB.basePrice - pointA.basePrice;
 }
 
-
+function isDatesEqual(dateA, dateB) {
+  return (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, "D");
+}
 export {
   humanizeTaskDueDate,
   getTimeFromDate,
@@ -120,5 +120,6 @@ export {
   isFuture,
   sortPointDay,
   sortPointTime,
-  sortPointPrice
+  sortPointPrice,
+  isDatesEqual,
 };

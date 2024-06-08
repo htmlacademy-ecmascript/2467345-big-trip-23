@@ -1,44 +1,50 @@
-import { getDateTime } from '../utils/point.js';
-import { getOffersTypeLength } from '../utils/point.js';
+import { getDateTime } from "../utils/point.js";
+import { getOffersTypeLength } from "../utils/point.js";
+import he from "he";
 
-import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
+import AbstractStatefulView from "../framework/view/abstract-stateful-view.js";
 
 const BLANK_POINT = {
   id: 0,
-  type: 'taxi',
+  type: "taxi",
   destination: 1,
-  offers:[],
-  basePrice: '',
+  offers: [],
+  basePrice: "",
   isFavorite: false,
-  dateFrom: '2019-07-11T19:00:00',
-  dateTo: '2019-07-11T19:00:00'
+  dateFrom: "2019-07-11T19:00:00",
+  dateTo: "2019-07-11T19:00:00",
 };
 
-
-function createFormEditTemplate(data, destinationsData, offersData){
-
-  const {type,destination,basePrice,offers,dateFrom,dateTo} = data;
+function createFormEditTemplate(data, destinationsData, offersData) {
+  const { type, destination, basePrice, offers, dateFrom, dateTo } = data;
   const dateTimeFrom = getDateTime(dateFrom);
   const dateTimeTo = getDateTime(dateTo);
-  const objDestination = destinationsData.find((dest) => dest.id === destination);
-
-  function viewPictures(){
+  console.log(data);
+  console.log(destinationsData);
+  console.log(offersData);
+  const objDestination = destinationsData.find(
+    (dest) => dest.id === destination
+  );
+  console.log(objDestination);
+  function viewPictures() {
     let result = '<div class="event__photos-tape">';
-    for(let i = 0; i < objDestination.pictures.length; i++){
+    for (let i = 0; i < objDestination.pictures.length; i++) {
       result = `${result}<img class="event__photo" src="${objDestination.pictures[i].src}" alt="${objDestination.pictures[i].description}">`;
     }
-    result = `${result }</div>`;
+    result = `${result}</div>`;
     return result;
   }
 
-  function viewOffers(){
+  function viewOffers() {
     let result = '<div class="event__available-offers">';
-    for(let i = 0; i < getOffersTypeLength(type); i++){
-      let checked = '';
-      if (offers[i]){
-        checked = 'checked';
+    for (let i = 0; i < getOffersTypeLength(type); i++) {
+      let checked = "";
+      if (offers[i]) {
+        checked = "checked";
       }
-      const {id, title, price} = offersData.find((offer) => offer.type === type).offers[i];
+      const { id, title, price } = offersData.find(
+        (offer) => offer.type === type
+      ).offers[i];
 
       result = `${result}
       <div class="event__offer-selector">
@@ -52,18 +58,18 @@ function createFormEditTemplate(data, destinationsData, offersData){
       `;
     }
     result = `${result}</div>`;
-    return (result);
+    return result;
   }
-  function viewTypeEvents(){
+  function viewTypeEvents() {
     let result = `
     <div class="event__type-list">
       <fieldset class="event__type-group">
         <legend class="visually-hidden">Event type</legend>
               `;
-    for(let i = 0; i < offersData.length; i++){
-      let checked = '';
-      if (type === offersData[i].type){
-        checked = 'checked';
+    for (let i = 0; i < offersData.length; i++) {
+      let checked = "";
+      if (type === offersData[i].type) {
+        checked = "checked";
       }
       result = `${result}
       <div class="event__type-item">
@@ -79,9 +85,9 @@ function createFormEditTemplate(data, destinationsData, offersData){
     return result;
   }
 
-  function viewDestinations(){
+  function viewDestinations() {
     let result = '<datalist id="destination-list-1">';
-    for(let i = 0; i < destinationsData.length; i++){
+    for (let i = 0; i < destinationsData.length; i++) {
       result = `${result}
           <option value="${destinationsData[i].name}"></option>
         `;
@@ -90,8 +96,7 @@ function createFormEditTemplate(data, destinationsData, offersData){
     return result;
   }
 
-  return (
-    `<li class="trip-events__item">
+  return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
@@ -108,17 +113,23 @@ function createFormEditTemplate(data, destinationsData, offersData){
           <label class="event__label  event__type-output" for="event-destination-1">
             ${type}
           </label>
-          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${objDestination.name}" list="destination-list-1">
+          <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(
+            objDestination.name
+          )}" list="destination-list-1">
           ${viewDestinations()}
 
         </div>
 
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateTimeFrom}">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${he.encode(
+            dateTimeFrom
+          )}">
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
-          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTimeTo}">
+          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${he.encode(
+            dateTimeTo
+          )}">
         </div>
 
         <div class="event__field-group  event__field-group--price">
@@ -144,7 +155,9 @@ function createFormEditTemplate(data, destinationsData, offersData){
 
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">${objDestination.description}</p>
+          <p class="event__destination-description">${he.encode(
+            objDestination.description
+          )}</p>
 
           <div class="event__photos-container">
             ${viewPictures()}
@@ -152,75 +165,90 @@ function createFormEditTemplate(data, destinationsData, offersData){
         </section>
       </section>
     </form>
-  </li>`
-  );
+  </li>`;
 }
 
-export default class FormEditView extends AbstractStatefulView{
+export default class FormEditView extends AbstractStatefulView {
   #point = null;
   #handleFormSubmit = null;
   #handleFormClick = null;
+  #handleDeleteClick = null;
   #destinationsData = null;
   #offersData = null;
 
-  constructor({point = BLANK_POINT, onFormSubmit, onFormClick, destinationsData, offersData }){
+  constructor({
+    point = BLANK_POINT,
+    onFormSubmit,
+    onFormClick,
+    onDeleteClick,
+    destinationsData,
+    offersData,
+  }) {
     super();
     this._setState(FormEditView.parsePointToState(point));
     this.#point = point;
     this.#handleFormSubmit = onFormSubmit;
     this.#handleFormClick = onFormClick;
+    this.#handleDeleteClick = onDeleteClick;
     this.#destinationsData = destinationsData;
     this.#offersData = offersData;
 
     this._restoreHandlers();
   }
 
-  _restoreHandlers(){
-    this.element.querySelector('form')
-      .addEventListener('submit', this.#formSubmitHandler);
-    this.element.querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#formClickHandler);
+  _restoreHandlers() {
+    this.element
+      .querySelector("form")
+      .addEventListener("submit", this.#formSubmitHandler);
+    this.element
+      .querySelector(".event__rollup-btn")
+      .addEventListener("click", this.#formClickHandler);
 
-    const typeInputs = this.element.querySelectorAll('.event__type-input');
+    this.element
+      .querySelector(".event__reset-btn")
+      .addEventListener("click", this.#formDeleteClickHandler);
+
+    const typeInputs = this.element.querySelectorAll(".event__type-input");
     for (let i = 0; i < typeInputs.length; i++) {
-      typeInputs[i].addEventListener('input', this.#eventTypeInputHandler);
+      typeInputs[i].addEventListener("input", this.#eventTypeInputHandler);
     }
 
-    const offers = this.element.querySelectorAll('.event__offer-checkbox');
+    const offers = this.element.querySelectorAll(".event__offer-checkbox");
     for (let i = 0; i < offers.length; i++) {
-      offers[i].addEventListener('input', this.#offerInputHandler);
+      offers[i].addEventListener("input", this.#offerInputHandler);
     }
-    this.element.querySelector('.event__input--destination')
-      .addEventListener('input', this.#destinationInputHandler);
+    this.element
+      .querySelector(".event__input--destination")
+      .addEventListener("input", this.#destinationInputHandler);
   }
 
   #offerInputHandler = (evt) => {
     evt.preventDefault();
-  //изменять выбранные предложения с помощью id
+    //изменять выбранные предложения с помощью id
   };
 
   #eventTypeInputHandler = (evt) => {
     evt.preventDefault();
     this.updateElement({
       type: evt.target.value,
-      offers:[]
+      offers: [],
     });
   };
 
   #destinationInputHandler = (evt) => {
     evt.preventDefault();
-    const destination = this.#destinationsData.find((item) => item.name === evt.target.value);
-    if(destination){
+    const destination = this.#destinationsData.find(
+      (item) => item.name === evt.target.value
+    );
+    if (destination) {
       this.updateElement({
         destination: destination.id,
       });
     }
   };
 
-  reset(point){
-    this.updateElement(
-      FormEditView.parsePointToState(point),
-    );
+  reset(point) {
+    this.updateElement(FormEditView.parsePointToState(point));
   }
 
   #formClickHandler = (evt) => {
@@ -233,22 +261,25 @@ export default class FormEditView extends AbstractStatefulView{
     this.#handleFormSubmit(FormEditView.parseStateToPoint(this._state));
   };
 
+  #formDeleteClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleDeleteClick(FormEditView.parseStateToPoint(this._state));
+  };
+
   static parsePointToState(point) {
-    return {...point};
+    return { ...point };
   }
 
   static parseStateToPoint(state) {
-    const point = {...state};
+    const point = { ...state };
     return point;
   }
 
-  get template(){
+  get template() {
     return createFormEditTemplate(
       this._state,
       this.#destinationsData,
       this.#offersData
     );
   }
-
-
 }
