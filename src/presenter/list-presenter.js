@@ -110,7 +110,6 @@ export default class ListPresenter {
   }
 
   #renderPoint(point) {
-    console.log(this.#pointsModel.destinations);
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#pointListView,
       destinationsData: this.#destinations,
