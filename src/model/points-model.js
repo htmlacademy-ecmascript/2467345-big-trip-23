@@ -1,5 +1,5 @@
-import { getRandomPoint, mockDestinations, mockOffers } from "../mock/points";
-import Observable from "../framework/observable.js";
+import { getRandomPoint, mockDestinations, mockOffers } from '../mock/points';
+import Observable from '../framework/observable.js';
 
 const POINT_COUNT = 3;
 
@@ -24,7 +24,7 @@ export default class PointsModel extends Observable {
     const index = this.#points.findIndex((task) => task.id === update.id);
 
     if (index === -1) {
-      throw new Error("Can't update unexisting task");
+      throw new Error('Can\'t update unexisting task');
     }
 
     this.#points = [
@@ -46,7 +46,7 @@ export default class PointsModel extends Observable {
     const index = this.#points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
-      throw new Error("Can't delete unexisting point");
+      throw new Error('Can\'t delete unexisting point');
     }
 
     this.#points = [
