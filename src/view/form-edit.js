@@ -1,31 +1,27 @@
-import { getDateTime } from "../utils/point.js";
-import { getOffersTypeLength } from "../utils/point.js";
-import he from "he";
+import { getDateTime } from '../utils/point.js';
+import { getOffersTypeLength } from '../utils/point.js';
+import he from 'he';
 
-import AbstractStatefulView from "../framework/view/abstract-stateful-view.js";
+import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 
 const BLANK_POINT = {
   id: 0,
-  type: "taxi",
+  type: 'taxi',
   destination: 1,
   offers: [],
-  basePrice: "",
+  basePrice: '',
   isFavorite: false,
-  dateFrom: "2019-07-11T19:00:00",
-  dateTo: "2019-07-11T19:00:00",
+  dateFrom: '2019-07-11T19:00:00',
+  dateTo: '2019-07-11T19:00:00',
 };
 
 function createFormEditTemplate(data, destinationsData, offersData) {
   const { type, destination, basePrice, offers, dateFrom, dateTo } = data;
   const dateTimeFrom = getDateTime(dateFrom);
   const dateTimeTo = getDateTime(dateTo);
-  console.log(data);
-  console.log(destinationsData);
-  console.log(offersData);
   const objDestination = destinationsData.find(
     (dest) => dest.id === destination
   );
-  console.log(objDestination);
   function viewPictures() {
     let result = '<div class="event__photos-tape">';
     for (let i = 0; i < objDestination.pictures.length; i++) {
@@ -38,9 +34,9 @@ function createFormEditTemplate(data, destinationsData, offersData) {
   function viewOffers() {
     let result = '<div class="event__available-offers">';
     for (let i = 0; i < getOffersTypeLength(type); i++) {
-      let checked = "";
+      let checked = '';
       if (offers[i]) {
-        checked = "checked";
+        checked = 'checked';
       }
       const { id, title, price } = offersData.find(
         (offer) => offer.type === type
@@ -67,9 +63,9 @@ function createFormEditTemplate(data, destinationsData, offersData) {
         <legend class="visually-hidden">Event type</legend>
               `;
     for (let i = 0; i < offersData.length; i++) {
-      let checked = "";
+      let checked = '';
       if (type === offersData[i].type) {
-        checked = "checked";
+        checked = 'checked';
       }
       result = `${result}
       <div class="event__type-item">
@@ -114,8 +110,8 @@ function createFormEditTemplate(data, destinationsData, offersData) {
             ${type}
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(
-            objDestination.name
-          )}" list="destination-list-1">
+    objDestination.name
+  )}" list="destination-list-1">
           ${viewDestinations()}
 
         </div>
@@ -123,13 +119,13 @@ function createFormEditTemplate(data, destinationsData, offersData) {
         <div class="event__field-group  event__field-group--time">
           <label class="visually-hidden" for="event-start-time-1">From</label>
           <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${he.encode(
-            dateTimeFrom
-          )}">
+    dateTimeFrom
+  )}">
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">To</label>
           <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${he.encode(
-            dateTimeTo
-          )}">
+    dateTimeTo
+  )}">
         </div>
 
         <div class="event__field-group  event__field-group--price">
@@ -156,8 +152,8 @@ function createFormEditTemplate(data, destinationsData, offersData) {
         <section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
           <p class="event__destination-description">${he.encode(
-            objDestination.description
-          )}</p>
+    objDestination.description
+  )}</p>
 
           <div class="event__photos-container">
             ${viewPictures()}
@@ -198,28 +194,31 @@ export default class FormEditView extends AbstractStatefulView {
 
   _restoreHandlers() {
     this.element
-      .querySelector("form")
-      .addEventListener("submit", this.#formSubmitHandler);
+      .querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
     this.element
-      .querySelector(".event__rollup-btn")
-      .addEventListener("click", this.#formClickHandler);
+      .querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#formClickHandler);
 
     this.element
-      .querySelector(".event__reset-btn")
-      .addEventListener("click", this.#formDeleteClickHandler);
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this.#formDeleteClickHandler);
 
-    const typeInputs = this.element.querySelectorAll(".event__type-input");
+    const typeInputs = this.element.querySelectorAll('.event__type-input');
     for (let i = 0; i < typeInputs.length; i++) {
-      typeInputs[i].addEventListener("input", this.#eventTypeInputHandler);
+      typeInputs[i].addEventListener(
+        'input',
+        this.#eventTypeInputHandler
+      );
     }
 
-    const offers = this.element.querySelectorAll(".event__offer-checkbox");
+    const offers = this.element.querySelectorAll('.event__offer-checkbox');
     for (let i = 0; i < offers.length; i++) {
-      offers[i].addEventListener("input", this.#offerInputHandler);
+      offers[i].addEventListener('input', this.#offerInputHandler);
     }
     this.element
-      .querySelector(".event__input--destination")
-      .addEventListener("input", this.#destinationInputHandler);
+      .querySelector('.event__input--destination')
+      .addEventListener('input', this.#destinationInputHandler);
   }
 
   #offerInputHandler = (evt) => {

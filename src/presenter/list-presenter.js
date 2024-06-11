@@ -1,12 +1,12 @@
-import { render, remove } from "../framework/render.js";
-import SortView from "../view/sort";
-import PointListView from "../view/point-list.js";
-import NoPointView from "../view/no-point.js";
-import PointPresenter from "./point-presenter.js";
-import { SortType, UserAction, UpdateType, FilterType } from "../const.js";
-import { sortPointDay, sortPointTime, sortPointPrice } from "../utils/point.js";
-import { filter } from "../utils/filter.js";
-import NewPointPresenter from "./new-point-presenter.js";
+import { render, remove } from '../framework/render.js';
+import SortView from '../view/sort';
+import PointListView from '../view/point-list.js';
+import NoPointView from '../view/no-point.js';
+import PointPresenter from './point-presenter.js';
+import { SortType, UserAction, UpdateType, FilterType } from '../const.js';
+import { sortPointDay, sortPointTime, sortPointPrice } from '../utils/point.js';
+import { filter } from '../utils/filter.js';
+import NewPointPresenter from './new-point-presenter.js';
 
 export default class ListPresenter {
   #container = null;
@@ -117,7 +117,6 @@ export default class ListPresenter {
   }
 
   #handleViewAction = (actionType, updateType, update) => {
-    console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointsModel.updatePoint(updateType, update);
@@ -132,7 +131,6 @@ export default class ListPresenter {
   };
 
   #handleModelEvent = (updateType, data) => {
-    console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
         // - обновить часть списка (например, когда поменялось описание)
