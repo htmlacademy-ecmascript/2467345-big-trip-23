@@ -1,5 +1,4 @@
 import { getDateTime } from '../utils/point.js';
-import { getOffersTypeLength } from '../utils/point.js';
 import he from 'he';
 
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
@@ -17,6 +16,7 @@ const BLANK_POINT = {
 
 function createFormEditTemplate(data, destinationsData, offersData) {
   const { type, destination, basePrice, offers, dateFrom, dateTo } = data;
+  const pointTypeOffers = offersData.find((offer) => offer.type === type)?.offers || [];
   const dateTimeFrom = getDateTime(dateFrom);
   const dateTimeTo = getDateTime(dateTo);
   const objDestination = destinationsData.find(
@@ -33,7 +33,7 @@ function createFormEditTemplate(data, destinationsData, offersData) {
 
   function viewOffers() {
     let result = '<div class="event__available-offers">';
-    for (let i = 0; i < getOffersTypeLength(type); i++) {
+    for (let i = 0; i < pointTypeOffers.length; i++) {
       let checked = '';
       if (offers[i]) {
         checked = 'checked';

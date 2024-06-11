@@ -1,4 +1,4 @@
-import { render, remove } from '../framework/render.js';
+import { render, remove, RenderPosition } from '../framework/render.js';
 import SortView from '../view/sort';
 import PointListView from '../view/point-list.js';
 import NoPointView from '../view/no-point.js';
@@ -7,6 +7,7 @@ import { SortType, UserAction, UpdateType, FilterType } from '../const.js';
 import { sortPointDay, sortPointTime, sortPointPrice } from '../utils/point.js';
 import { filter } from '../utils/filter.js';
 import NewPointPresenter from './new-point-presenter.js';
+import LoadingView from '../view/loading-view.js';
 
 export default class ListPresenter {
   #container = null;
@@ -19,7 +20,9 @@ export default class ListPresenter {
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
   #pointListView = new PointListView();
+  #loadingComponent = new LoadingView();
   #noPointsView = null;
+  #isLoading = true;
 
   #destinations = [];
   #offers = [];
@@ -77,6 +80,10 @@ export default class ListPresenter {
     this.points.slice(from, to).forEach((point) => this.#renderPoint(point));
   }
 
+  #renderLoading() {
+    render(this.#loadingComponent, this.#pointListView.element, RenderPosition.AFTERBEGIN);
+  }
+
   #renderNoPoints() {
     this.#noPointsView = new NoPointView({
       filterType: this.#filterType,
@@ -90,6 +97,10 @@ export default class ListPresenter {
   }
 
   #renderMain() {
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
     if (this.points.length === 0) {
       this.#renderNoPoints();
       return;
@@ -99,6 +110,7 @@ export default class ListPresenter {
   }
 
   #renderPoint(point) {
+    console.log(this.#pointsModel.destinations);
     const pointPresenter = new PointPresenter({
       pointListContainer: this.#pointListView,
       destinationsData: this.#destinations,
@@ -146,6 +158,11 @@ export default class ListPresenter {
         });
         this.#renderMain();
         break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.init();
+        break;
     }
   };
 
@@ -172,6 +189,7 @@ export default class ListPresenter {
     this.#pointPresenters.clear();
     this.#newPointPresenter.destroy();
     remove(this.#sortView);
+    remove(this.#loadingComponent);
     remove(this.#noPointsView);
     if (resetSortType) {
       this.#currentSortType = SortType.DEFAULT;

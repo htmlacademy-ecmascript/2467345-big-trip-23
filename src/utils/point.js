@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import { mockOffers } from '../mock/points';
 
 const DATE_FORMAT = 'D MMMM';
 const TIME_FORMAT = 'HH:mm';
@@ -25,7 +24,7 @@ function dateDiff(dateFrom, dateTo) {
   let hours = Math.floor(minutes / 60);
   const days = Math.floor(minutes / (24 * 60));
   hours = hours - days * 24;
-  minutes = minutes - hours * 60;
+  minutes = minutes - hours * 60 - days * 24 * 60;
 
   const daysStr = days !== 0 ? `${days}D` : '';
   const hoursStr = hours !== 0 ? `${hours}H` : '';
@@ -35,10 +34,6 @@ function dateDiff(dateFrom, dateTo) {
 
 function isFavoriteStyle(isFavorite) {
   return isFavorite === true ? '--active' : '';
-}
-
-function getOffersTypeLength(type) {
-  return mockOffers.find((offer) => offer.type === type).offers.length;
 }
 
 function isFuture(point) {
@@ -114,7 +109,6 @@ export {
   dateDiff,
   isFavoriteStyle,
   getDateTime,
-  getOffersTypeLength,
   isPast,
   isPresent,
   isFuture,
