@@ -1,12 +1,12 @@
-import { render, replace, remove } from "../framework/render";
-import PointView from "../view/point";
-import FormEditView from "../view/form-edit";
-import { UserAction, UpdateType } from "../const.js";
-import { isDatesEqual } from "../utils/point.js";
+import { render, replace, remove } from '../framework/render';
+import PointView from '../view/point';
+import FormEditView from '../view/form-edit';
+import { UserAction, UpdateType } from '../const.js';
+import { isDatesEqual } from '../utils/point.js';
 
 const Mode = {
-  DEFAULT: "DEFAULT",
-  EDITING: "EDITING",
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
 };
 
 export default class PointPresenter {
@@ -90,19 +90,19 @@ export default class PointPresenter {
 
   #replaceCardToForm() {
     replace(this.#formEditComponent, this.#pointComponent);
-    document.addEventListener("keydown", this.#escKeyDownHandler);
+    document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#handleModeChange();
     this.#mode = Mode.EDITING;
   }
 
   #replaceFormToCard() {
     replace(this.#pointComponent, this.#formEditComponent);
-    document.addEventListener("keydown", this.#escKeyDownHandler);
+    document.addEventListener('keydown', this.#escKeyDownHandler);
     this.#mode = Mode.DEFAULT;
   }
 
   #escKeyDownHandler = (evt) => {
-    if (evt.key === "Escape") {
+    if (evt.key === 'Escape') {
       evt.preventDefault();
       this.#formEditComponent.reset(this.#point);
       this.#replaceFormToCard();

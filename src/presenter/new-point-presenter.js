@@ -1,7 +1,7 @@
-import { remove, render, RenderPosition } from "../framework/render.js";
-import FormEditView from "../view/form-edit.js";
-import { nanoid } from "nanoid";
-import { UserAction, UpdateType } from "../const.js";
+import { remove, render, RenderPosition } from '../framework/render.js';
+import FormEditView from '../view/form-edit.js';
+import { nanoid } from 'nanoid';
+import { UserAction, UpdateType } from '../const.js';
 
 export default class NewPointPresenter {
   #pointListContainer = null;
@@ -34,6 +34,7 @@ export default class NewPointPresenter {
     this.#pointEditComponent = new FormEditView({
       onFormSubmit: this.#handleFormSubmit,
       onDeleteClick: this.#handleDeleteClick,
+      onFormClick: this.#handleDeleteClick,
       destinationsData: this.#destinations,
       offersData: this.#offers,
     });
@@ -44,7 +45,7 @@ export default class NewPointPresenter {
       RenderPosition.AFTERBEGIN
     );
 
-    document.addEventListener("keydown", this.#escKeyDownHandler);
+    document.addEventListener('keydown', this.#escKeyDownHandler);
   }
 
   destroy() {
@@ -57,7 +58,7 @@ export default class NewPointPresenter {
     remove(this.#pointEditComponent);
     this.#pointEditComponent = null;
 
-    document.removeEventListener("keydown", this.#escKeyDownHandler);
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
   }
 
   #handleFormSubmit = (point) => {
@@ -76,7 +77,7 @@ export default class NewPointPresenter {
   };
 
   #escKeyDownHandler = (evt) => {
-    if (evt.key === "Escape" || evt.key === "Esc") {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
       this.destroy();
     }

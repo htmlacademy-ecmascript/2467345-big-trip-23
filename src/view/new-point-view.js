@@ -1,4 +1,4 @@
-import AbstractView from "../framework/view/abstract-view.js";
+import AbstractView from '../framework/view/abstract-view.js';
 
 export default class NewPointButtonView extends AbstractView {
   #handleClick = null;
@@ -8,7 +8,7 @@ export default class NewPointButtonView extends AbstractView {
     super();
     this.#button = button;
     this.#handleClick = onClick;
-    this.#button.addEventListener("click", this.#clickHandler);
+    this.#button.addEventListener('click', this.#clickHandler);
   }
 
   get template() {

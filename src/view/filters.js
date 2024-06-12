@@ -1,4 +1,4 @@
-import AbstractVeiw from "../framework/view/abstract-view.js";
+import AbstractVeiw from '../framework/view/abstract-view.js';
 
 function createFilterItemTemplate(filter, currentFilterType) {
   const { type, count } = filter;
@@ -11,8 +11,8 @@ function createFilterItemTemplate(filter, currentFilterType) {
       type="radio"
       name="trip-filter"
       value="${type}"
-      ${type === currentFilterType ? "checked" : ""}
-      ${count === 0 ? "disables" : ""}
+      ${type === currentFilterType ? 'checked' : ''}
+      ${count === 0 ? 'disables' : ''}
       />
       <label class="trip-filters__filter-label" for="filter-${type}">${type} ${count}</label>
     </div>
@@ -22,7 +22,7 @@ function createFilterItemTemplate(filter, currentFilterType) {
 function createFiltersTemplate(filterItems, currentFilterType) {
   const filterItemsTemplate = filterItems
     .map((filter) => createFilterItemTemplate(filter, currentFilterType))
-    .join("");
+    .join('');
 
   return `<div class="trip-main__trip-controls  trip-controls">
       <div class="trip-controls__filters">
@@ -47,7 +47,7 @@ export default class FiltersView extends AbstractVeiw {
     this.#currentFilter = currentFilterType;
     this.#handleFilterTypeChange = onFilterTypeChange;
 
-    this.element.addEventListener("change", this.#filterTypeChangeHandler);
+    this.element.addEventListener('change', this.#filterTypeChangeHandler);
   }
 
   get template() {

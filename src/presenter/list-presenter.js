@@ -1,12 +1,13 @@
-import { render, remove } from "../framework/render.js";
-import SortView from "../view/sort";
-import PointListView from "../view/point-list.js";
-import NoPointView from "../view/no-point.js";
-import PointPresenter from "./point-presenter.js";
-import { SortType, UserAction, UpdateType, FilterType } from "../const.js";
-import { sortPointDay, sortPointTime, sortPointPrice } from "../utils/point.js";
-import { filter } from "../utils/filter.js";
-import NewPointPresenter from "./new-point-presenter.js";
+import { render, remove, RenderPosition } from '../framework/render.js';
+import SortView from '../view/sort';
+import PointListView from '../view/point-list.js';
+import NoPointView from '../view/no-point.js';
+import PointPresenter from './point-presenter.js';
+import { SortType, UserAction, UpdateType, FilterType } from '../const.js';
+import { sortPointDay, sortPointTime, sortPointPrice } from '../utils/point.js';
+import { filter } from '../utils/filter.js';
+import NewPointPresenter from './new-point-presenter.js';
+import LoadingView from '../view/loading-view.js';
 
 export default class ListPresenter {
   #container = null;
@@ -19,7 +20,9 @@ export default class ListPresenter {
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
   #pointListView = new PointListView();
+  #loadingComponent = new LoadingView();
   #noPointsView = null;
+  #isLoading = true;
 
   #destinations = [];
   #offers = [];
@@ -77,6 +80,10 @@ export default class ListPresenter {
     this.points.slice(from, to).forEach((point) => this.#renderPoint(point));
   }
 
+  #renderLoading() {
+    render(this.#loadingComponent, this.#pointListView.element, RenderPosition.AFTERBEGIN);
+  }
+
   #renderNoPoints() {
     this.#noPointsView = new NoPointView({
       filterType: this.#filterType,
@@ -90,6 +97,10 @@ export default class ListPresenter {
   }
 
   #renderMain() {
+    if (this.#isLoading) {
+      this.#renderLoading();
+      return;
+    }
     if (this.points.length === 0) {
       this.#renderNoPoints();
       return;
@@ -117,7 +128,6 @@ export default class ListPresenter {
   }
 
   #handleViewAction = (actionType, updateType, update) => {
-    console.log(actionType, updateType, update);
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this.#pointsModel.updatePoint(updateType, update);
@@ -132,7 +142,6 @@ export default class ListPresenter {
   };
 
   #handleModelEvent = (updateType, data) => {
-    console.log(updateType, data);
     switch (updateType) {
       case UpdateType.PATCH:
         // - обновить часть списка (например, когда поменялось описание)
@@ -147,6 +156,11 @@ export default class ListPresenter {
           resetSortType: true,
         });
         this.#renderMain();
+        break;
+      case UpdateType.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        this.init();
         break;
     }
   };
@@ -174,6 +188,7 @@ export default class ListPresenter {
     this.#pointPresenters.clear();
     this.#newPointPresenter.destroy();
     remove(this.#sortView);
+    remove(this.#loadingComponent);
     remove(this.#noPointsView);
     if (resetSortType) {
       this.#currentSortType = SortType.DEFAULT;
