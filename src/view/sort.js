@@ -8,7 +8,7 @@ function createSortTemplate(currentSortType) {
   currentSortType === SortType.DAY ? 'board__sort-item--active' : ''
 }" type="radio" name="trip-sort" value="sort-day"  data-sort-type="${
   SortType.DAY
-}" checked>
+}" ${currentSortType === SortType.DAY ? 'checked' : ''}>
         <label class="trip-sort__btn" for="sort-day">Day</label>
       </div>
 
@@ -22,7 +22,7 @@ function createSortTemplate(currentSortType) {
   currentSortType === SortType.TIME ? 'board__sort-item--active' : ''
 }" type="radio" name="trip-sort" value="sort-time" data-sort-type="${
   SortType.TIME
-}">
+}" ${currentSortType === SortType.TIME ? 'checked' : ''}>
         <label class="trip-sort__btn" for="sort-time">Time</label>
       </div>
 
@@ -31,7 +31,7 @@ function createSortTemplate(currentSortType) {
   currentSortType === SortType.PRICE ? 'board__sort-item--active' : ''
 }" type="radio" name="trip-sort" value="sort-price" data-sort-type="${
   SortType.PRICE
-}">
+}" ${currentSortType === SortType.PRICE ? 'checked' : ''}>
         <label class="trip-sort__btn" for="sort-price">Price</label>
       </div>
 

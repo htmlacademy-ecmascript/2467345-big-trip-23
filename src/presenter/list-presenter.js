@@ -3,6 +3,7 @@ import SortView from '../view/sort';
 import PointListView from '../view/point-list.js';
 import NoPointView from '../view/no-point.js';
 import PointPresenter from './point-presenter.js';
+import FailedLoadView from '../view/failed-load-view';
 import { SortType, UserAction, UpdateType, FilterType } from '../const.js';
 import { sortPointDay, sortPointTime, sortPointPrice } from '../utils/point.js';
 import { filter } from '../utils/filter.js';
@@ -22,13 +23,16 @@ export default class ListPresenter {
   #newPointPresenter = null;
   #filterModel = null;
   #onNewPointDestroy = null;
+  #networkError = false;
 
   #sortView = null;
   #currentSortType = SortType.DAY;
   #filterType = FilterType.EVERYTHING;
   #pointListView = new PointListView();
   #loadingComponent = new LoadingView();
+  #failedLoadComponent = new FailedLoadView();
   #noPointsView = null;
+  #isCreatingNewPoint = false;
   #isLoading = true;
   #uiBlocker = new UiBlocker({
     lowerLimit: TimeLimit.LOWER_LIMIT,
@@ -74,6 +78,7 @@ export default class ListPresenter {
       destinationsData: this.#destinations,
       offersData: this.#offers,
     });
+    this.#networkError = this.#pointsModel.networkError;
 
     this.#destinations = [...this.#pointsModel.destinations];
     this.#offers = [...this.#pointsModel.offers];
@@ -88,6 +93,16 @@ export default class ListPresenter {
     render(this.#sortView, this.#container);
   }
 
+  #renderNewPointPresenter() {
+    this.#newPointPresenter = new NewPointPresenter({
+      pointListContainer: this.#pointListView.element,
+      onDataChange: this.#handleViewAction,
+      onDestroy: this.#newPointDestroyHandler,
+      destinationsData: this.#destinations,
+      offersData: this.#offers,
+    });
+  }
+
   #renderPoints(from, to) {
     this.points.slice(from, to).forEach((point) => this.#renderPoint(point));
   }
@@ -96,16 +111,15 @@ export default class ListPresenter {
     render(this.#loadingComponent, this.#container, RenderPosition.BEFOREEND);
   }
 
+  #renderFailLoad() {
+    render(this.#failedLoadComponent, this.#container, RenderPosition.BEFOREEND);
+  }
+
   #renderNoPoints() {
     this.#noPointsView = new NoPointView({
       filterType: this.#filterType,
     });
-    render(this.#noPointsView, this.#pointListView.element);
-  }
-
-  #renderPointList() {
-    render(this.#pointListView, this.#container);
-    this.#renderPoints(0, this.points.length);
+    render(this.#noPointsView, this.#container);
   }
 
   #renderMain() {
@@ -113,12 +127,23 @@ export default class ListPresenter {
       this.#renderLoading();
       return;
     }
+
+    this.#renderSort();
+    render(this.#pointListView, this.#container);
+    this.#renderNewPointPresenter();
+
     if (this.points.length === 0) {
+      if (this.#isCreatingNewPoint) {
+        return;
+      }
+      if(this.#networkError){
+        this.#renderFailLoad();
+        return;
+      }
       this.#renderNoPoints();
       return;
     }
-    this.#renderSort();
-    this.#renderPointList();
+    this.#renderPoints(0, this.points.length);
   }
 
   #renderPoint(point) {
@@ -134,8 +159,9 @@ export default class ListPresenter {
   }
 
   createPoint() {
+    this.#isCreatingNewPoint = true;
     this.#currentSortType = SortType.DAY;
-    this.#filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this.#filterModel.setFilter(UpdateType.MINOR, FilterType.EVERYTHING);
     this.#newPointPresenter.init();
   }
 
@@ -208,13 +234,26 @@ export default class ListPresenter {
     this.#renderMain();
   };
 
+  #newPointDestroyHandler = () => {
+    this.#isCreatingNewPoint = false;
+
+    if (!this.points.length) {
+      this.#renderNoPoints();
+    }
+
+    this.#onNewPointDestroy();
+  };
+
   #clearBoard({ resetSortType = false } = {}) {
     this.#pointPresenters.forEach((presenter) => presenter.destroy());
     this.#pointPresenters.clear();
     this.#newPointPresenter.destroy();
     remove(this.#sortView);
+    remove(this.#failedLoadComponent);
     remove(this.#loadingComponent);
-    remove(this.#noPointsView);
+    if (this.#noPointsView) {
+      remove(this.#noPointsView);
+    }
     if (resetSortType) {
       this.#currentSortType = SortType.DAY;
     }
