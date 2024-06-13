@@ -93,8 +93,6 @@ export default class ListPresenter {
   }
 
   #renderLoading() {
-    console.log(this.#pointListView.element);
-    console.log(this.#loadingComponent);
     render(this.#loadingComponent, this.#container, RenderPosition.BEFOREEND);
   }
 
@@ -112,7 +110,6 @@ export default class ListPresenter {
 
   #renderMain() {
     if (this.#isLoading) {
-      console.log(this.#renderLoading());
       this.#renderLoading();
       return;
     }

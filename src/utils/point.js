@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import { escape } from 'he';
 
 const DATE_FORMAT = 'D MMMM';
 const TIME_FORMAT = 'HH:mm';
@@ -33,11 +32,9 @@ function dateDiff(dateFrom, dateTo) {
 
   if(days > 0){
     return `${daysStr + hoursStr + minutesStr}`;
-  }
-  else if(hours > 0){
+  } else if(hours > 0){
     return `${hoursStr + minutesStr}`;
-  }
-  else{
+  } else{
     return `${minutesStr}`;
   }
 }
