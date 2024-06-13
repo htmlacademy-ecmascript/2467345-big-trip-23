@@ -8,7 +8,7 @@ const BLANK_POINT = {
   type: 'flight',
   destination: null,
   offers: [],
-  basePrice: '',
+  basePrice: '0',
   isFavorite: false,
   dateFrom: null,
   dateTo: null,
@@ -26,7 +26,7 @@ function createFormEditTemplate(data, destinationsData, offersData) {
     isSaving,
     isDeleting,
   } = data;
-  const deleteButtonName = isDeleting ? 'Deleting' : 'Delete';
+  const deleteButtonName = isDeleting ? 'Deleting...' : 'Delete';
   const resetButtonName = !data.id ? 'Cancel' : deleteButtonName;
   const pointTypeOffers = offersData.find((offer) => offer.type === type)?.offers || [];
   const dateTimeFrom = getDateTime(dateFrom);
@@ -52,7 +52,6 @@ function createFormEditTemplate(data, destinationsData, offersData) {
       if (offers.includes(id)) {
         checked = 'checked';
       }
-
       result = `${result}
       <div class="event__offer-selector">
         <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}" type="checkbox" name="event-offer" value="${id}" ${checked} ${isDisabled ? 'disabled' : ''}>
@@ -109,10 +108,10 @@ function createFormEditTemplate(data, destinationsData, offersData) {
           <p class="event__destination-description">${
   objDestination === null ? '' : objDestination.description
 }</p>
-
-          <div class="event__photos-container">
+          ${objDestination?.pictures.length === 0 ? '' : `<div class="event__photos-container">
             ${viewPictures()}
-          </div>`;
+          </div>`}
+          `;
     return result;
   }
 
@@ -160,10 +159,10 @@ function createFormEditTemplate(data, destinationsData, offersData) {
           <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}" ${isDisabled ? 'disabled' : ''}>
         </div>
 
-        <button class="event__save-btn  btn  btn--blue" type="submit" ${isDisabled ? 'disabled' : ''}>
+        <button class="event__save-btn  btn  btn--blue" type="submit">
         ${isSaving ? 'Saving...' : 'Save'}
         </button>
-        <button class="event__reset-btn" type="reset" ${isDisabled ? 'disabled' : ''}>${resetButtonName}</button>
+        <button class="event__reset-btn" type="reset"}>${resetButtonName}</button>
         <button class="event__rollup-btn" type="button">
           <span class="visually-hidden">Open event</span>
         </button>
@@ -189,6 +188,7 @@ export default class FormEditView extends AbstractStatefulView {
   #offersData = null;
   #eventStartDatepicker = null;
   #eventEndDatepicker = null;
+  #basePrice = '0';
 
   constructor({
     point = BLANK_POINT,
@@ -206,6 +206,7 @@ export default class FormEditView extends AbstractStatefulView {
     this.#handleDeleteClick = onDeleteClick;
     this.#destinationsData = destinationsData;
     this.#offersData = offersData;
+    this.#basePrice = point.basePrice;
 
     this._restoreHandlers();
   }
@@ -239,14 +240,14 @@ export default class FormEditView extends AbstractStatefulView {
     const typeInputs = this.element.querySelectorAll('.event__type-input');
     for (let i = 0; i < typeInputs.length; i++) {
       typeInputs[i].addEventListener(
-        'input',
+        'change',
         this.#eventTypeInputHandler
       );
     }
 
-    const offers = this.element.querySelectorAll('.event__offer-checkbox');
+    const offers = this.element.querySelectorAll('.event__offer-selector');
     for (let i = 0; i < offers.length; i++) {
-      offers[i].addEventListener('input', this.#offerInputHandler);
+      offers[i].addEventListener('change', this.#offerInputHandler);
     }
     const basePriceInput = this.element.querySelector('#event-price-1');
     this.element
@@ -262,13 +263,12 @@ export default class FormEditView extends AbstractStatefulView {
     const offerId = evt.target.value;
     const isChecked = evt.target.checked;
     let offers = [...this._state.offers];
-
     if (isChecked) {
       offers.push(offerId);
     } else {
       offers = offers.filter((id) => id !== offerId);
     }
-    this.updateElement({ offers });
+    this.updateElement({ offers, basePrice: this.#basePrice });
   };
 
   #eventTypeInputHandler = (evt) => {
@@ -353,7 +353,10 @@ export default class FormEditView extends AbstractStatefulView {
   #basePriceInputHandler = (evt) => {
     const value = evt.target.value || '0';
     const basePrice = parseInt(value, 10);
-    this.updateElement({ basePrice });
+    this.#basePrice = basePrice;
+    this.element.querySelector('.event__input--price').value = basePrice;
+    // this.updateElement({ basePrice });
+
   };
 
   reset(point) {
@@ -367,6 +370,8 @@ export default class FormEditView extends AbstractStatefulView {
 
   #formSubmitHandler = (evt) => {
     evt.preventDefault();
+    const basePrice = parseInt(this.element.querySelector('.event__input--price').value,10);
+    this.updateElement({basePrice: basePrice});
     this.#handleFormSubmit(FormEditView.parseStateToPoint(this._state));
   };
 
