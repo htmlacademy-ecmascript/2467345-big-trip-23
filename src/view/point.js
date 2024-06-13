@@ -1,5 +1,5 @@
 import {
-  humanizeTaskDueDate,
+  humanizePointDueDate,
   getTimeFromDate,
   dateDiff,
   isFavoriteStyle,
@@ -11,7 +11,9 @@ function createPointTemplate(point, destinationsData, offersData) {
   const { type, destination, basePrice, offers, isFavorite, dateFrom, dateTo } =
     point;
 
-  const dateFromHumanize = humanizeTaskDueDate(dateFrom);
+  const pointTypeOffers = offersData.find((offer) => offer.type === type)?.offers || [];
+
+  const dateFromHumanize = humanizePointDueDate(dateFrom);
   const timeFrom = getTimeFromDate(dateFrom);
   const timeTo = getTimeFromDate(dateTo);
   const objDestination = destinationsData.find(
@@ -22,8 +24,7 @@ function createPointTemplate(point, destinationsData, offersData) {
   function viewOffers() {
     let result = '<ul class="event__selected-offers">';
     for (let i = 0; i < offers.length; i++) {
-      const { title, price } = offersData.find((offer) => offer.type === type)
-        .offers[i];
+      const { title, price } = pointTypeOffers.find((offer) => offer.id === offers[i]);
       result = `${result}
       <li class="event__offer">
         <span class="event__offer-title">${title}</span>

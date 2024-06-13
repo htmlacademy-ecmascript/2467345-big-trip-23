@@ -4,7 +4,7 @@ const DATE_FORMAT = 'D MMMM';
 const TIME_FORMAT = 'HH:mm';
 const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
 
-function humanizeTaskDueDate(dueDate) {
+function humanizePointDueDate(dueDate) {
   return dueDate ? dayjs(dueDate).format(DATE_FORMAT) : '';
 }
 
@@ -26,10 +26,17 @@ function dateDiff(dateFrom, dateTo) {
   hours = hours - days * 24;
   minutes = minutes - hours * 60 - days * 24 * 60;
 
-  const daysStr = days !== 0 ? `${days}D` : '';
-  const hoursStr = hours !== 0 ? `${hours}H` : '';
+  const daysStr = `${days.toString().padStart(2, '0')}D`;
+  const hoursStr = `${hours.toString().padStart(2, '0')}H`;
+  const minutesStr = `${minutes.toString().padStart(2, '0')}M`;
 
-  return `${daysStr + hoursStr + minutes}M`;
+  if(days > 0){
+    return `${daysStr + hoursStr + minutesStr}`;
+  } else if(hours > 0){
+    return `${hoursStr + minutesStr}`;
+  } else{
+    return `${minutesStr}`;
+  }
 }
 
 function isFavoriteStyle(isFavorite) {
@@ -104,7 +111,7 @@ function isDatesEqual(dateA, dateB) {
   return (dateA === null && dateB === null) || dayjs(dateA).isSame(dateB, 'D');
 }
 export {
-  humanizeTaskDueDate,
+  humanizePointDueDate,
   getTimeFromDate,
   dateDiff,
   isFavoriteStyle,

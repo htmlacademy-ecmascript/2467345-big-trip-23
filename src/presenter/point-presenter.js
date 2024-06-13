@@ -70,6 +70,7 @@ export default class PointPresenter {
 
     if (this.#mode === Mode.EDITING) {
       replace(this.#formEditComponent, prevFormEditComponent);
+      this.#mode = Mode.DEFAULT;
     }
 
     remove(prevPointComponent);
@@ -88,6 +89,41 @@ export default class PointPresenter {
     remove(this.#formEditComponent);
   }
 
+  setSaving() {
+    if (this.#mode === Mode.EDITING) {
+      this.#formEditComponent.updateElement({
+        isDisabled: true,
+        isSaving: true,
+      });
+    }
+  }
+
+  setDeleting() {
+    if (this.#mode === Mode.EDITING) {
+      this.#formEditComponent.updateElement({
+        isDisabled: true,
+        isDeleting: true,
+      });
+    }
+  }
+
+  setAborting() {
+    if (this.#mode === Mode.DEFAULT) {
+      this.#pointComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#formEditComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#formEditComponent.shake(resetFormState);
+  }
+
   #replaceCardToForm() {
     replace(this.#formEditComponent, this.#pointComponent);
     document.addEventListener('keydown', this.#escKeyDownHandler);
@@ -97,7 +133,7 @@ export default class PointPresenter {
 
   #replaceFormToCard() {
     replace(this.#pointComponent, this.#formEditComponent);
-    document.addEventListener('keydown', this.#escKeyDownHandler);
+    document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#mode = Mode.DEFAULT;
   }
 
@@ -121,14 +157,15 @@ export default class PointPresenter {
   };
 
   #handleFormSubmit = (update) => {
-    const isMinorUpdate = !isDatesEqual(this.#point.dueDate, update.dueDate);
+    const isFromDatesEqual = !isDatesEqual(this.#point.dueFrom, update.dueFrom);
+    const isToDatesEqual = !isDatesEqual(this.#point.dueFrom, update.dueFrom);
+    const isMinorUpdate = isFromDatesEqual && isToDatesEqual;
 
     this.#handleDataChange(
       UserAction.UPDATE_POINT,
-      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      isMinorUpdate ? UpdateType.PATCH : UpdateType.MINOR,
       update
     );
-    this.#replaceFormToCard();
   };
 
   #handleDeleteClick = (point) => {

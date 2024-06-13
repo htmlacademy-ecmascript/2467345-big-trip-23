@@ -8,6 +8,12 @@ import { sortPointDay, sortPointTime, sortPointPrice } from '../utils/point.js';
 import { filter } from '../utils/filter.js';
 import NewPointPresenter from './new-point-presenter.js';
 import LoadingView from '../view/loading-view.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
 
 export default class ListPresenter {
   #container = null;
@@ -15,6 +21,7 @@ export default class ListPresenter {
   #pointPresenters = new Map();
   #newPointPresenter = null;
   #filterModel = null;
+  #onNewPointDestroy = null;
 
   #sortView = null;
   #currentSortType = SortType.DAY;
@@ -23,6 +30,10 @@ export default class ListPresenter {
   #loadingComponent = new LoadingView();
   #noPointsView = null;
   #isLoading = true;
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
 
   #destinations = [];
   #offers = [];
@@ -33,14 +44,7 @@ export default class ListPresenter {
     this.#filterModel = filterModel;
     this.#destinations = [...this.#pointsModel.destinations];
     this.#offers = [...this.#pointsModel.offers];
-
-    this.#newPointPresenter = new NewPointPresenter({
-      pointListContainer: this.#pointListView.element,
-      onDataChange: this.#handleViewAction,
-      onDestroy: onNewPointDestroy,
-      destinationsData: this.#destinations,
-      offersData: this.#offers,
-    });
+    this.#onNewPointDestroy = onNewPointDestroy;
 
     this.#pointsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -63,6 +67,14 @@ export default class ListPresenter {
   }
 
   init() {
+    this.#newPointPresenter = new NewPointPresenter({
+      pointListContainer: this.#pointListView.element,
+      onDataChange: this.#handleViewAction,
+      onDestroy: this.#onNewPointDestroy,
+      destinationsData: this.#destinations,
+      offersData: this.#offers,
+    });
+
     this.#destinations = [...this.#pointsModel.destinations];
     this.#offers = [...this.#pointsModel.offers];
     this.#renderMain();
@@ -81,7 +93,7 @@ export default class ListPresenter {
   }
 
   #renderLoading() {
-    render(this.#loadingComponent, this.#pointListView.element, RenderPosition.AFTERBEGIN);
+    render(this.#loadingComponent, this.#container, RenderPosition.BEFOREEND);
   }
 
   #renderNoPoints() {
@@ -127,35 +139,51 @@ export default class ListPresenter {
     this.#newPointPresenter.init();
   }
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this.#pointsModel.updatePoint(updateType, update);
+        this.#pointPresenters.get(update.id).setSaving();
+        try {
+          await this.#pointsModel.updatePoint(updateType, update);
+        } catch(err) {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
         break;
       case UserAction.ADD_POINT:
-        this.#pointsModel.addPoint(updateType, update);
+        this.#newPointPresenter.setSaving();
+        try {
+          await this.#pointsModel.addPoint(updateType, update);
+        } catch(err) {
+          this.#newPointPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_POINT:
-        this.#pointsModel.deletePoint(updateType, update);
+        this.#pointPresenters.get(update.id).setDeleting();
+        try {
+          await this.#pointsModel.deletePoint(updateType, update);
+        } catch(err) {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        // - обновить часть списка (например, когда поменялось описание)
         this.#pointPresenters.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
         this.#clearBoard();
-        this.#renderMain();
+        this.init();
         break;
       case UpdateType.MAJOR:
         this.#clearBoard({
           resetSortType: true,
         });
-        this.#renderMain();
+        this.init();
         break;
       case UpdateType.INIT:
         this.#isLoading = false;
@@ -176,11 +204,8 @@ export default class ListPresenter {
     }
 
     this.#currentSortType = sortType;
-    this.#clearBoard({ resetRenderedTaskCount: true });
+    this.#clearBoard();
     this.#renderMain();
-    // - Сортируем задачи
-    // - Очищаем список
-    // - Рендерим список заново
   };
 
   #clearBoard({ resetSortType = false } = {}) {
@@ -191,7 +216,7 @@ export default class ListPresenter {
     remove(this.#loadingComponent);
     remove(this.#noPointsView);
     if (resetSortType) {
-      this.#currentSortType = SortType.DEFAULT;
+      this.#currentSortType = SortType.DAY;
     }
   }
 }
