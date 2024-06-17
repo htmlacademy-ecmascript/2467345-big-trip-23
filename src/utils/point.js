@@ -3,6 +3,8 @@ import dayjs from 'dayjs';
 const DATE_FORMAT = 'MMM D';
 const TIME_FORMAT = 'HH:mm';
 const DATE_TIME_FORMAT = 'DD/MM/YY HH:mm';
+const MINUTES_IN_HOUR = 60;
+const HOURS_IN_DAY = 24;
 
 function humanizePointDueDate(dueDate) {
   return dueDate ? dayjs(dueDate).format(DATE_FORMAT) : '';
@@ -21,10 +23,10 @@ function dateDiff(dateFrom, dateTo) {
   const date2 = dayjs(dateTo);
 
   let minutes = date2.diff(date1, 'minute');
-  let hours = Math.floor(minutes / 60);
-  const days = Math.floor(minutes / (24 * 60));
-  hours = hours - days * 24;
-  minutes = minutes - hours * 60 - days * 24 * 60;
+  let hours = Math.floor(minutes / MINUTES_IN_HOUR);
+  const days = Math.floor(minutes / (HOURS_IN_DAY * MINUTES_IN_HOUR));
+  hours = hours - days * HOURS_IN_DAY;
+  minutes = minutes - hours * MINUTES_IN_HOUR - days * HOURS_IN_DAY * MINUTES_IN_HOUR;
 
   const daysStr = `${days.toString().padStart(2, '0')}D`;
   const hoursStr = `${hours.toString().padStart(2, '0')}H`;

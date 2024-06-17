@@ -2,7 +2,7 @@ import ListPresenter from './presenter/list-presenter.js';
 import PointsModel from './model/points-model.js';
 import FilterModel from './model/filter-model.js';
 import FilterPresenter from './presenter/filter-presenter.js';
-import NewPointButtonView from './view/new-point-view.js';
+import NewPointButtonView from './view/new-point-button-view.js';
 import PointApiService from './points-api-service.js';
 
 const AUTHORIZATION = 'Basic FdEuanFU7S4DqYX8';

@@ -1,5 +1,5 @@
 import { remove, render, RenderPosition } from '../framework/render.js';
-import FormEditView from '../view/form-edit.js';
+import FormEditView from '../view/form-edit-view.js';
 import { UserAction, UpdateType } from '../const.js';
 
 export default class NewPointPresenter {
