@@ -1,6 +1,6 @@
 import { render, replace, remove } from '../framework/render';
-import PointView from '../view/point';
-import FormEditView from '../view/form-edit';
+import PointView from '../view/point-view.js';
+import FormEditView from '../view/form-edit-view.js';
 import { UserAction, UpdateType } from '../const.js';
 import { isDatesEqual } from '../utils/point.js';
 

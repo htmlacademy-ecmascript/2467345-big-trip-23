@@ -1,7 +1,7 @@
 import { render, remove, RenderPosition } from '../framework/render.js';
-import SortView from '../view/sort';
-import PointListView from '../view/point-list.js';
-import NoPointView from '../view/no-point.js';
+import SortView from '../view/sort-view.js';
+import PointListView from '../view/trip-events-list-view.js';
+import NoPointView from '../view/no-point-view.js';
 import PointPresenter from './point-presenter.js';
 import FailedLoadView from '../view/failed-load-view';
 import { SortType, UserAction, UpdateType, FilterType } from '../const.js';
@@ -139,9 +139,10 @@ export default class ListPresenter {
       if(this.#networkError){
         this.#renderFailLoad();
         return;
+      } else{
+        this.#renderNoPoints();
+        return;
       }
-      this.#renderNoPoints();
-      return;
     }
     this.#renderPoints(0, this.points.length);
   }
@@ -238,7 +239,11 @@ export default class ListPresenter {
     this.#isCreatingNewPoint = false;
 
     if (!this.points.length) {
-      this.#renderNoPoints();
+      if(this.#networkError){
+        this.#renderFailLoad();
+      } else{
+        this.#renderNoPoints();
+      }
     }
 
     this.#onNewPointDestroy();

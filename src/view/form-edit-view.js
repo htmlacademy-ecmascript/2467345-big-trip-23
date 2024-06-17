@@ -247,19 +247,19 @@ export default class FormEditView extends AbstractStatefulView {
 
     const offers = this.element.querySelectorAll('.event__offer-selector');
     for (let i = 0; i < offers.length; i++) {
-      offers[i].addEventListener('change', this.#offerInputHandler);
+      offers[i].addEventListener('change', this.#offerChangeHandler);
     }
     const basePriceInput = this.element.querySelector('#event-price-1');
     this.element
       .querySelector('.event__input--destination')
-      .addEventListener('change', this.#destinationInputHandler);
-    basePriceInput.addEventListener('change', this.#basePriceInputHandler);
-    basePriceInput.addEventListener('keydown', this.#basePricedownHandler);
+      .addEventListener('change', this.#destinationChangeHandler);
+    basePriceInput.addEventListener('change', this.#basePriceChangeHandler);
+    basePriceInput.addEventListener('keydown', this.#basePriceKeydownHandler);
     this.#setEventStartDatepicker();
     this.#setEventEndDatepicker();
   }
 
-  #offerInputHandler = (evt) => {
+  #offerChangeHandler = (evt) => {
     const offerId = evt.target.value;
     const isChecked = evt.target.checked;
     let offers = [...this._state.offers];
@@ -279,7 +279,7 @@ export default class FormEditView extends AbstractStatefulView {
     });
   };
 
-  #destinationInputHandler = (evt) => {
+  #destinationChangeHandler = (evt) => {
     evt.preventDefault();
     const destination = this.#destinationsData.find(
       (item) => item.name === evt.target.value
@@ -290,7 +290,7 @@ export default class FormEditView extends AbstractStatefulView {
       });
     } else{
       this.updateElement({
-        destination: this.#destinationsData[0].id,
+        destination: null,
       });
     }
   };
@@ -340,7 +340,7 @@ export default class FormEditView extends AbstractStatefulView {
     );
   }
 
-  #basePricedownHandler = (evt) => {
+  #basePriceKeydownHandler = (evt) => {
     const isKeyDigit = /\d/.test(evt.key);
     const isKeyBackspace = evt.key === 'Backspace';
     const isKeyDelete = evt.key === 'Delete';
@@ -350,13 +350,11 @@ export default class FormEditView extends AbstractStatefulView {
     }
   };
 
-  #basePriceInputHandler = (evt) => {
+  #basePriceChangeHandler = (evt) => {
     const value = evt.target.value || '0';
     const basePrice = parseInt(value, 10);
     this.#basePrice = basePrice;
     this.element.querySelector('.event__input--price').value = basePrice;
-    // this.updateElement({ basePrice });
-
   };
 
   reset(point) {
